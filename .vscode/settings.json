@@ -1,0 +1,6 @@
+{
+  "deno.enable": true,
+  "deno.enablePaths": ["backend"],
+  "deno.config": "./backend/deno.json",
+  "deno.lint": true
+}
