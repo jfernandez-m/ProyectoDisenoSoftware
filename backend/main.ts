@@ -14,7 +14,21 @@ const FIELD_MASK = [
   "places.primaryType",
   "places.rating",
   "places.priceLevel",
+  "places.userRatingCount",
+  "places.photos",
 ].join(",");
+
+const LODGING_TYPES = [
+  "hotel",
+  "lodging",
+  "resort_hotel",
+  "extended_stay_hotel",
+  "motel",
+  "hostel",
+  "inn",
+  "bed_and_breakfast",
+  "guest_house",
+];
 
 // Busca restaurantes dentro de un círculo (radio en metros) alrededor de una coordenada.
 async function searchNearbyRestaurants(latitude: number, longitude: number, radius: number) {
@@ -27,6 +41,8 @@ async function searchNearbyRestaurants(latitude: number, longitude: number, radi
     },
     body: JSON.stringify({
       includedTypes: ["restaurant"],
+      // Un hotel con restaurante adentro también calza con "restaurant"; lo sacamos por su tipo principal.
+      excludedPrimaryTypes: LODGING_TYPES,
       maxResultCount: 10,
       locationRestriction: { circle: { center: { latitude, longitude }, radius } },
     }),
@@ -48,7 +64,36 @@ async function searchNearbyRestaurants(latitude: number, longitude: number, radi
     cuisine: place.primaryType,
     rating: place.rating ?? null,
     priceLevel: place.priceLevel ?? null,
+    ratingCount: place.userRatingCount ?? 0,
+    // Solo el nombre de la primera foto; la imagen se pide después a /api/photo.
+    photo: place.photos?.[0]?.name ?? null,
   }));
+}
+
+// GET /api/photo?name=places/../photos/..
+// El frontend pide las fotos aquí para que la API key nunca salga del backend.
+async function photoHandler(url: URL): Promise<Response> {
+  const name = url.searchParams.get("name") ?? "";
+  // Solo aceptamos nombres de foto reales, para que nadie use este endpoint para llamar otras URLs con nuestra key.
+  if (!/^places\/[\w-]+\/photos\/[\w-]+$/.test(name)) {
+    return Response.json({ error: "invalid photo name" }, { status: 400 });
+  }
+
+  const response = await fetch(
+    `https://places.googleapis.com/v1/${name}/media?maxWidthPx=600&key=${apiKey}`,
+  );
+  if (!response.ok) {
+    console.error(`Places photo error ${response.status}`);
+    return Response.json({ error: "Could not fetch photo" }, { status: 502 });
+  }
+
+  return new Response(response.body, {
+    headers: {
+      "Content-Type": response.headers.get("Content-Type") ?? "image/jpeg",
+      // Google cobra por cada foto: el navegador la guarda un día para no pedirla de nuevo.
+      "Cache-Control": "public, max-age=86400",
+    },
+  });
 }
 
 // GET /api/restaurants?lat=..&lng=..&radius=..
@@ -82,6 +127,9 @@ Deno.serve({ port: 8000 }, (request) => {
 
   if (request.method === "GET" && url.pathname === "/api/restaurants") {
     return restaurantsHandler(url);
+  }
+  if (request.method === "GET" && url.pathname === "/api/photo") {
+    return photoHandler(url);
   }
 
   return Response.json({ error: "Not found" }, { status: 404 });
