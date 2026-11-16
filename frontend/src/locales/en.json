@@ -1,0 +1,18 @@
+{
+  "brand": "Restaurant Recommender",
+  "language": "Language",
+  "nav": { "home": "Home", "map": "Map", "lists": "Lists" },
+  "title": "Nearby restaurants",
+  "filters": { "price": "Price", "cuisine": "Cuisine", "any": "Any" },
+  "loading": "Loading…",
+  "noMatches": "No restaurants match these filters.",
+  "noRating": "No rating",
+  "reviews_one": "{{count}} review",
+  "reviews_other": "{{count}} reviews",
+  "noPrice": "No price",
+  "errors": {
+    "noGeolocation": "Your browser does not support geolocation.",
+    "locationDenied": "We need your location to find nearby restaurants.",
+    "loadFailed": "Could not load restaurants. Is the backend running?"
+  }
+}
