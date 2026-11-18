@@ -84,17 +84,22 @@ function App() {
       <ul className="restaurant-list">
         {visible.map((restaurant) => (
           <li key={restaurant.id} className="card">
-            {/* alt="" because the photo is decorative: the name is right below it. */}
-            {restaurant.photo ? (
-              <img
-                className="card-photo"
-                src={`/api/photo?name=${encodeURIComponent(restaurant.photo)}`}
-                alt=""
-                loading="lazy"
-              />
-            ) : (
-              <div className="card-photo" />
-            )}
+            {/* Horizontal strip; scroll-snap in CSS stops each photo aligned. */}
+            <div className="card-photos" tabIndex={0} aria-label={t('photos')}>
+              {restaurant.photos.length > 0 ? (
+                restaurant.photos.map((name) => (
+                  <img
+                    key={name}
+                    className="card-photo"
+                    src={`/api/photo?name=${encodeURIComponent(name)}`}
+                    alt=""
+                    loading="lazy"
+                  />
+                ))
+              ) : (
+                <div className="card-photo" />
+              )}
+            </div>
             <div className="card-body">
               <strong className="card-name">{restaurant.name}</strong>
               {restaurant.rating ? (

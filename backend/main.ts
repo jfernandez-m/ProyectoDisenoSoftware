@@ -43,7 +43,7 @@ async function searchNearbyRestaurants(latitude: number, longitude: number, radi
       includedTypes: ["restaurant"],
       // Un hotel con restaurante adentro también calza con "restaurant"; lo sacamos por su tipo principal.
       excludedPrimaryTypes: LODGING_TYPES,
-      maxResultCount: 10,
+      maxResultCount: 5,
       locationRestriction: { circle: { center: { latitude, longitude }, radius } },
     }),
   });
@@ -65,8 +65,10 @@ async function searchNearbyRestaurants(latitude: number, longitude: number, radi
     rating: place.rating ?? null,
     priceLevel: place.priceLevel ?? null,
     ratingCount: place.userRatingCount ?? 0,
-    // Solo el nombre de la primera foto; la imagen se pide después a /api/photo.
-    photo: place.photos?.[0]?.name ?? null,
+    // Nombres de las primeras 4 fotos; cada imagen se pide después a /api/photo.
+    // deno-lint-ignore no-explicit-any
+    photos: (place.photos ?? []).slice(0, 4).map((photo: any) => photo.name),
+
   }));
 }
 

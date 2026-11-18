@@ -7,6 +7,7 @@
   "loading": "Loading…",
   "noMatches": "No restaurants match these filters.",
   "noRating": "No rating",
+  "photos": "Restaurant photos",
   "reviews_one": "{{count}} review",
   "reviews_other": "{{count}} reviews",
   "noPrice": "No price",
