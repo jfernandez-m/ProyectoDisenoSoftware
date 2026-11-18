@@ -123,12 +123,25 @@ body {
 
 /* Fixed shape so every card has the same height; the border color shows while there is no photo. */
 .card-photo {
+  flex: 0 0 100%;
   display: block;
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
   background: var(--color-border);
 }
+
+/* Native carousel: no library, swipe on mobile, scroll on desktop. */
+.card-photos {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+
+.card-photos > .card-photo {
+  scroll-snap-align: start;
+}
+
 
 .card-body {
   display: flex;
