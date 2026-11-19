@@ -11,7 +11,7 @@ const PRICE_LABELS = {
 }
 
 function App() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [restaurants, setRestaurants] = useState(null) // null = still loading
   // We store the translation key, not the text, so the message changes with the language.
   const [error, setError] = useState(navigator.geolocation ? '' : 'errors.noGeolocation')
@@ -108,7 +108,13 @@ function App() {
                   <span className="stars" style={{ '--rating': restaurant.rating }} aria-hidden="true">
                     ★★★★★
                   </span>
-                  <strong>{restaurant.rating.toFixed(1)}</strong>
+                  {/* toLocaleString uses Intl: "4,5" in Spanish, "4.5" in English. */}
+                  <strong>
+                    {restaurant.rating.toLocaleString(i18n.language, {
+                      minimumFractionDigits: 1,
+                      maximumFractionDigits: 1,
+                    })}
+                  </strong>
                   <span className="muted">
                     ({t('reviews', { count: restaurant.ratingCount })})
                   </span>
