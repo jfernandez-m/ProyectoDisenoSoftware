@@ -1,4 +1,6 @@
-# Recomendador de Restaurantes
+# Entre Platos
+
+Recomendador de restaurantes.
 
 Proyecto individual para Diseño de Software (TICS316-2-2026), UAI.
 
