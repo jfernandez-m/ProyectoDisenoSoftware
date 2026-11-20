@@ -14,13 +14,13 @@ La idea es una app web para encontrar lugares donde comer según tus gustos y d�
 - Español e inglés, con selector de idioma en el menú
 - Diseño responsive: se adapta a celular, tablet y computador
 - Mensajes claros mientras carga, si no das permiso de ubicación o si el backend no responde
-- Inicio de sesión con Google (SSO) y botón para cerrar sesión
-- Cuentas propias con usuario y contraseña en el backend (registro, inicio y cierre de sesión). Las contraseñas se guardan como hash PBKDF2 con salt, nunca en texto plano
+- Página de inicio de sesión (`/login`) con dos opciones: Google (SSO) o una cuenta propia con usuario y contraseña. Desde la misma página se puede crear la cuenta
+- Las contraseñas se guardan como hash PBKDF2 con salt, nunca en texto plano
+- Botón para cerrar sesión, con el nombre del usuario en el menú
 - Sesiones con una cookie `HttpOnly` que dura 7 días
 
 ## Qué falta
 
-- Página de inicio de sesión con el formulario de usuario y contraseña (el backend ya está listo)
 - Recomendaciones basadas en lo que has buscado y calificado
 - Mapa con los restaurantes cercanos (Google Maps)
 - Reseñas de Google y un resumen de lo que más se comenta
@@ -75,7 +75,7 @@ Abre `http://localhost:5173` y acepta el permiso de ubicación. El frontend le p
 
 ## Tecnologías
 
-- Frontend: React con Vite
+- Frontend: React con Vite y React Router
 - Backend: Deno, con Deno KV para usuarios y sesiones
 - Traducciones: i18next, con textos propios en `frontend/src/locales/`
 - Google Maps / Places API
