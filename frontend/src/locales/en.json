@@ -11,6 +11,28 @@
   "reviews_one": "{{count}} review",
   "reviews_other": "{{count}} reviews",
   "noPrice": "No price",
+  "auth": {
+    "loginTitle": "Log in",
+    "registerTitle": "Create account",
+    "or": "or",
+    "username": "Username",
+    "password": "Password",
+    "usernameHint": "3 to 20 characters: letters, numbers or _",
+    "passwordHint": "At least 8 characters",
+    "login": "Log in",
+    "register": "Create account",
+    "logout": "Log out",
+    "sending": "Sending…",
+    "noAccount": "No account? Create one here",
+    "haveAccount": "Already have an account? Log in",
+    "errors": {
+      "invalidInput": "Check the username and password.",
+      "usernameTaken": "That username is already taken.",
+      "invalidCredentials": "Wrong username or password.",
+      "invalidGoogleToken": "We couldn't verify your Google account.",
+      "network": "Could not reach the server. Is the backend running?"
+    }
+  },
   "errors": {
     "noGeolocation": "Your browser does not support geolocation.",
     "locationDenied": "We need your location to find nearby restaurants.",

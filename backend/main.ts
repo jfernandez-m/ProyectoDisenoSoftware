@@ -1,3 +1,5 @@
+import { googleLogin, login, logout, me, register } from "./auth.ts";
+
 const apiKey = Deno.env.get("GOOGLE_PLACES_API_KEY");
 if (!apiKey) {
   console.error("Missing GOOGLE_PLACES_API_KEY in backend/.env");
@@ -132,6 +134,21 @@ Deno.serve({ port: 8000 }, (request) => {
   }
   if (request.method === "GET" && url.pathname === "/api/photo") {
     return photoHandler(url);
+  }
+  if (request.method === "POST" && url.pathname === "/api/auth/register") {
+    return register(request);
+  }
+  if (request.method === "POST" && url.pathname === "/api/auth/login") {
+    return login(request);
+  }
+  if (request.method === "POST" && url.pathname === "/api/auth/logout") {
+    return logout(request);
+  }
+  if (request.method === "GET" && url.pathname === "/api/auth/me") {
+    return me(request);
+  }
+    if (request.method === "POST" && url.pathname === "/api/auth/google") {
+    return googleLogin(request);
   }
 
   return Response.json({ error: "Not found" }, { status: 404 });

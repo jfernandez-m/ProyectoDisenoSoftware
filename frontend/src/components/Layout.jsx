@@ -1,14 +1,17 @@
 import { useTranslation } from 'react-i18next'
+import { Link, Outlet } from 'react-router'
+import { useAuth } from '../auth/AuthContext.jsx'
 
-function Layout({ children }) {
+function Layout() {
   const { t, i18n } = useTranslation()
+  const { user, logout } = useAuth()
 
   return (
     <div className="layout">
       <header className="header">
-        <span className="brand">{t('brand')}</span>
+        <Link to="/" className="brand">{t('brand')}</Link>
         <nav className="nav">
-          <a href="#">{t('nav.home')}</a>
+          <Link to="/">{t('nav.home')}</Link>
           <a href="#">{t('nav.map')}</a>
           <a href="#">{t('nav.lists')}</a>
           <select
@@ -19,9 +22,21 @@ function Layout({ children }) {
             <option value="es">Español</option>
             <option value="en">English</option>
           </select>
+          {/* user is undefined while we still don't know: show nothing, so it doesn't flicker. */}
+          {user && (
+            <>
+              <span className="muted">{user.name}</span>
+              <button type="button" className="button-link" onClick={logout}>
+                {t('auth.logout')}
+              </button>
+            </>
+          )}
+          {user === null && <Link to="/login">{t('auth.login')}</Link>}
         </nav>
       </header>
-      <main className="main">{children}</main>
+      <main className="main">
+        <Outlet />
+      </main>
     </div>
   )
 }

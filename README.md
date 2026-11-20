@@ -14,10 +14,13 @@ La idea es una app web para encontrar lugares donde comer según tus gustos y d�
 - Español e inglés, con selector de idioma en el menú
 - Diseño responsive: se adapta a celular, tablet y computador
 - Mensajes claros mientras carga, si no das permiso de ubicación o si el backend no responde
+- Página de inicio de sesión (`/login`) con dos opciones: Google (SSO) o una cuenta propia con usuario y contraseña. Desde la misma página se puede crear la cuenta
+- Las contraseñas se guardan como hash PBKDF2 con salt, nunca en texto plano
+- Botón para cerrar sesión, con el nombre del usuario en el menú
+- Sesiones con una cookie `HttpOnly` que dura 7 días
 
 ## Qué falta
 
-- Login con Google
 - Recomendaciones basadas en lo que has buscado y calificado
 - Mapa con los restaurantes cercanos (Google Maps)
 - Reseñas de Google y un resumen de lo que más se comenta
@@ -25,29 +28,45 @@ La idea es una app web para encontrar lugares donde comer según tus gustos y d�
 
 ## Cómo correrlo localmente
 
-Necesitas [Deno](https://deno.com) 2, [Node.js](https://nodejs.org) 20 o superior y una API key de Google Cloud con **Places API (New)** activada.
+Necesitas [Deno](https://deno.com) 2, [Node.js](https://nodejs.org) 20 o superior y un proyecto en Google Cloud con:
+
+- Una **API key** con **Places API (New)** activada.
+- Un **ID de cliente de OAuth** de tipo "Aplicación web" (en Google Auth Platform → Clientes), con `http://localhost:5173` y `http://localhost` en **Orígenes autorizados de JavaScript**.
 
 ### 1. Backend
+
+Solo la primera vez, para crear `backend/.env`. Si ya existe, sáltate este paso: `cp` lo reemplaza y borra tus llaves.
 
 ```bash
 cd backend
 cp .env.example .env
 ```
 
-Abre `backend/.env` y reemplaza `your-api-key-here` por tu API key. Después:
+Abre `backend/.env` y reemplaza los valores de ejemplo:
+
+- `GOOGLE_PLACES_API_KEY`: tu API key.
+- `GOOGLE_CLIENT_ID`: tu ID de cliente de OAuth.
+
+Después:
 
 ```bash
 deno task dev
 ```
 
-La API queda en `http://localhost:8000`.
+La API queda en `http://localhost:8000`. Los usuarios y las sesiones se guardan en Deno KV, la base de datos incluida en Deno, así que no hay que instalar nada más.
 
 ### 2. Frontend
 
-En otra terminal:
+En otra terminal. Igual que en el backend, el `cp` es solo la primera vez:
 
 ```bash
 cd frontend
+cp .env.example .env
+```
+
+Abre `frontend/.env` y pon en `VITE_GOOGLE_CLIENT_ID` el **mismo** ID de cliente del backend. Después:
+
+```bash
 npm install
 npm run dev
 ```
@@ -56,9 +75,11 @@ Abre `http://localhost:5173` y acepta el permiso de ubicación. El frontend le p
 
 ## Tecnologías
 
-- Frontend: React con Vite
-- Traducciones: i18next, con textos propios en `frontend/src/locales/` 
+- Frontend: React con Vite y React Router
+- Backend: Deno, con Deno KV para usuarios y sesiones
+- Traducciones: i18next, con textos propios en `frontend/src/locales/`
 - Google Maps / Places API
+- Inicio de sesión con Google: Google Identity Services en el frontend y verificación del token con `jose` en el backend
 
 ## Estructura
 
