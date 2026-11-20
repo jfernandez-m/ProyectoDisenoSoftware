@@ -54,6 +54,7 @@ body {
   font-size: var(--font-lg);
   font-weight: 700;
   color: var(--color-primary);
+  text-decoration: none;
 }
 
 .nav {
@@ -184,4 +185,71 @@ body {
   border: none;
   text-decoration: underline;
   cursor: pointer;
+}
+
+/* --- Login page --- */
+
+.auth-card {
+  max-width: 400px;
+  margin: var(--space-5) auto;
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.auth-card h1 {
+  margin-top: 0;
+}
+
+.divider {
+  text-align: center;
+  color: var(--color-muted);
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.auth-form label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+}
+
+.auth-form input {
+  padding: var(--space-2);
+  font: inherit;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.form-error {
+  margin: 0;
+  color: var(--color-primary);
+}
+
+.button-primary {
+  margin-top: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  font: inherit;
+  font-weight: 600;
+  color: var(--color-surface);
+  background: var(--color-primary);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.button-primary:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.auth-card .button-link {
+  margin-top: var(--space-3);
+  padding: 0;
 }

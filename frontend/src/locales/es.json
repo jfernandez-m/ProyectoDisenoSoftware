@@ -11,8 +11,27 @@
   "reviews_one": "{{count}} opinión",
   "reviews_other": "{{count}} opiniones",
   "noPrice": "Sin precio",
-    "auth": {
-    "logout": "Cerrar sesión"
+  "auth": {
+    "loginTitle": "Iniciar sesión",
+    "registerTitle": "Crear cuenta",
+    "or": "o",
+    "username": "Nombre de usuario",
+    "password": "Contraseña",
+    "usernameHint": "Entre 3 y 20 caracteres: letras, números o _",
+    "passwordHint": "Al menos 8 caracteres",
+    "login": "Iniciar sesión",
+    "register": "Crear cuenta",
+    "logout": "Cerrar sesión",
+    "sending": "Enviando…",
+    "noAccount": "¿No tienes cuenta? Créala aquí",
+    "haveAccount": "¿Ya tienes cuenta? Inicia sesión",
+    "errors": {
+      "invalidInput": "Revisa el nombre de usuario y la contraseña.",
+      "usernameTaken": "Ese nombre de usuario ya existe.",
+      "invalidCredentials": "Usuario o contraseña incorrectos.",
+      "invalidGoogleToken": "No se pudo verificar tu cuenta de Google.",
+      "network": "No se pudo conectar con el servidor. ¿Está encendido el backend?"
+    }
   },
   "errors": {
     "noGeolocation": "Tu navegador no permite obtener la ubicación.",
