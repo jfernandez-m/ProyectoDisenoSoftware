@@ -12,7 +12,7 @@ function Layout() {
         <Link to="/" className="brand">{t('brand')}</Link>
         <nav className="nav">
           <Link to="/">{t('nav.home')}</Link>
-          <a href="#">{t('nav.map')}</a>
+          <Link to="/map">{t('nav.map')}</Link>
           <a href="#">{t('nav.lists')}</a>
           <select
             aria-label={t('language')}

@@ -253,3 +253,19 @@ body {
   margin-top: var(--space-3);
   padding: 0;
 }
+
+/* --- Map page --- */
+
+/* The map has no height of its own: shorter on phones, taller on big screens. */
+.map {
+  height: 60vh;
+  min-height: 300px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .map {
+    height: 70vh;
+  }
+}
