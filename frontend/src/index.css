@@ -175,3 +175,13 @@ body {
   font-size: var(--font-sm);
   color: var(--color-muted);
 }
+/* Looks like a link but is a button, because it does an action instead of navigating. */
+.button-link {
+  padding: var(--space-2);
+  font: inherit;
+  color: var(--color-primary);
+  background: none;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+}

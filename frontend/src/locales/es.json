@@ -11,6 +11,9 @@
   "reviews_one": "{{count}} opinión",
   "reviews_other": "{{count}} opiniones",
   "noPrice": "Sin precio",
+    "auth": {
+    "logout": "Cerrar sesión"
+  },
   "errors": {
     "noGeolocation": "Tu navegador no permite obtener la ubicación.",
     "locationDenied": "Necesitamos tu ubicación para buscar restaurantes cercanos.",

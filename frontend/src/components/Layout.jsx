@@ -14,6 +14,12 @@ function Layout({ children }) {
       .catch(() => setUser(null))
   }, [])
 
+    // The backend deletes the session and the cookie; here we only forget the user.
+  async function handleLogout() {
+    await fetch('/api/auth/logout', { method: 'POST' })
+    setUser(null)
+  }
+
   return (
     <div className="layout">
       <header className="header">
@@ -30,7 +36,15 @@ function Layout({ children }) {
             <option value="es">Español</option>
             <option value="en">English</option>
           </select>
-          {user && <span className="muted">{user.name}</span>}
+                    {user && (
+            <>
+              <span className="muted">{user.name}</span>
+              <button type="button" className="button-link" onClick={handleLogout}>
+                {t('auth.logout')}
+              </button>
+            </>
+          )}
+
           {user === null && <GoogleButton />}
         </nav>
       </header>

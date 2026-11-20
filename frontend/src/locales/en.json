@@ -11,6 +11,9 @@
   "reviews_one": "{{count}} review",
   "reviews_other": "{{count}} reviews",
   "noPrice": "No price",
+    "auth": {
+    "logout": "Log out"
+  },
   "errors": {
     "noGeolocation": "Your browser does not support geolocation.",
     "locationDenied": "We need your location to find nearby restaurants.",
