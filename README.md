@@ -18,11 +18,11 @@ La idea es una app web para encontrar lugares donde comer según tus gustos y d�
 - Las contraseñas se guardan como hash PBKDF2 con salt, nunca en texto plano
 - Botón para cerrar sesión, con el nombre del usuario en el menú
 - Sesiones con una cookie `HttpOnly` que dura 7 días
+- Página de mapa (`/map`) con Google Maps: tu ubicación, los restaurantes cercanos y, al hacer clic en uno, su nombre, calificación, dirección y un link para abrirlo en Google Maps
 
 ## Qué falta
 
 - Recomendaciones basadas en lo que has buscado y calificado
-- Mapa con los restaurantes cercanos (Google Maps)
 - Reseñas de Google y un resumen de lo que más se comenta
 - Listas de restaurantes visitados y pendientes, que se pueden compartir con un link
 
@@ -32,6 +32,7 @@ Necesitas [Deno](https://deno.com) 2, [Node.js](https://nodejs.org) 20 o superio
 
 - Una **API key** con **Places API (New)** activada.
 - Un **ID de cliente de OAuth** de tipo "Aplicación web" (en Google Auth Platform → Clientes), con `http://localhost:5173` y `http://localhost` en **Orígenes autorizados de JavaScript**.
+- Una **segunda API key** para el mapa, con **Maps JavaScript API** activada. Esta key se usa en el navegador, así que restríngela a sitios web (`http://localhost:5173/*`) y solo a Maps JavaScript API. No uses la de Places: esa queda secreta en el backend.
 
 ### 1. Backend
 
@@ -64,7 +65,12 @@ cd frontend
 cp .env.example .env
 ```
 
-Abre `frontend/.env` y pon en `VITE_GOOGLE_CLIENT_ID` el **mismo** ID de cliente del backend. Después:
+Abre `frontend/.env` y reemplaza los valores de ejemplo:
+
+- `VITE_GOOGLE_CLIENT_ID`: el **mismo** ID de cliente del backend.
+- `VITE_GOOGLE_MAPS_API_KEY`: la key del mapa.
+
+Después:
 
 ```bash
 npm install
@@ -78,7 +84,8 @@ Abre `http://localhost:5173` y acepta el permiso de ubicación. El frontend le p
 - Frontend: React con Vite y React Router
 - Backend: Deno, con Deno KV para usuarios y sesiones
 - Traducciones: i18next, con textos propios en `frontend/src/locales/`
-- Google Maps / Places API
+- Google Places API (New) en el backend para buscar restaurantes y fotos
+- Google Maps JavaScript API en el frontend, con `@vis.gl/react-google-maps`
 - Inicio de sesión con Google: Google Identity Services en el frontend y verificación del token con `jose` en el backend
 
 ## Estructura
