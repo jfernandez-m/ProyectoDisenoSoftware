@@ -1,7 +1,18 @@
 import { useTranslation } from 'react-i18next'
+import { useEffect, useState } from 'react'
+import GoogleButton from './GoogleButton.jsx'
 
 function Layout({ children }) {
   const { t, i18n } = useTranslation()
+  // undefined = still asking, null = not logged in, object = logged in.
+  const [user, setUser] = useState(undefined)
+
+  useEffect(() => {
+    fetch('/api/auth/me')
+      .then((response) => (response.ok ? response.json() : null))
+      .then(setUser)
+      .catch(() => setUser(null))
+  }, [])
 
   return (
     <div className="layout">
@@ -19,6 +30,8 @@ function Layout({ children }) {
             <option value="es">Español</option>
             <option value="en">English</option>
           </select>
+          {user && <span className="muted">{user.name}</span>}
+          {user === null && <GoogleButton />}
         </nav>
       </header>
       <main className="main">{children}</main>

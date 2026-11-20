@@ -1,4 +1,4 @@
-import { login, logout, me, register } from "./auth.ts";
+import { googleLogin, login, logout, me, register } from "./auth.ts";
 
 const apiKey = Deno.env.get("GOOGLE_PLACES_API_KEY");
 if (!apiKey) {
@@ -146,6 +146,9 @@ Deno.serve({ port: 8000 }, (request) => {
   }
   if (request.method === "GET" && url.pathname === "/api/auth/me") {
     return me(request);
+  }
+    if (request.method === "POST" && url.pathname === "/api/auth/google") {
+    return googleLogin(request);
   }
 
   return Response.json({ error: "Not found" }, { status: 404 });

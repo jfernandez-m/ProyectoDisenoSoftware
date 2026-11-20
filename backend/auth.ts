@@ -1,5 +1,15 @@
 // Accounts and sessions live in Deno KV, the key-value database built into Deno.
+import { createRemoteJWKSet, jwtVerify } from "jsr:@panva/jose@6";
+
 const kv = await Deno.openKv();
+
+const googleClientId = Deno.env.get("GOOGLE_CLIENT_ID");
+if (!googleClientId) {
+  console.error("Missing GOOGLE_CLIENT_ID in backend/.env");
+  Deno.exit(1);
+}
+// Google's public keys. jose downloads them once and caches them.
+const GOOGLE_KEYS = createRemoteJWKSet(new URL("https://www.googleapis.com/oauth2/v3/certs"));
 
 const SESSION_SECONDS = 7 * 24 * 60 * 60; // 7 days
 // Slow on purpose: makes guessing passwords from a stolen hash expensive (OWASP: >= 600,000).
@@ -142,4 +152,27 @@ export async function me(request: Request): Promise<Response> {
   const user = await currentUser(request);
   if (!user) return Response.json({ error: "notLoggedIn" }, { status: 401 });
   return Response.json(publicUser(user));
+}
+
+// POST /api/auth/google  { credential }  (the ID token the Google button gave the frontend)
+export async function googleLogin(request: Request): Promise<Response> {
+  const body = await readJson(request);
+  let payload;
+  try {
+    // Checks Google's signature, that the token is for OUR app (audience) and not expired.
+    ({ payload } = await jwtVerify(String(body?.credential ?? ""), GOOGLE_KEYS, {
+      issuer: ["https://accounts.google.com", "accounts.google.com"],
+      audience: googleClientId,
+    }));
+  } catch {
+    return Response.json({ error: "invalidGoogleToken" }, { status: 401 });
+  }
+
+  // "sub" is Google's permanent id for this person; the ":" keeps it apart from local usernames.
+  const user: User = {
+    username: `google:${payload.sub}`,
+    name: String(payload.name ?? payload.email ?? "Google"),
+  };
+  await kv.set(["users", user.username], user); // creates the account the first time
+  return startSession(user);
 }
