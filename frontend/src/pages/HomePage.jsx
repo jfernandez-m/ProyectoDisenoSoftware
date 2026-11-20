@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNearbyRestaurants } from '../hooks/useNearbyRestaurants.js'
 
 // Google's price levels mapped to the symbols we show. PRICE_LEVEL_FREE is left out on purpose.
 const PRICE_LABELS = {
@@ -11,29 +12,9 @@ const PRICE_LABELS = {
 
 function HomePage() {
   const { t, i18n } = useTranslation()
-  const [restaurants, setRestaurants] = useState(null) // null = still loading
-  // We store the translation key, not the text, so the message changes with the language.
-  const [error, setError] = useState(navigator.geolocation ? '' : 'errors.noGeolocation')
+  const { restaurants, error } = useNearbyRestaurants()
   const [price, setPrice] = useState('') // '' = any price
   const [cuisine, setCuisine] = useState('') // '' = any cuisine
-
-  useEffect(() => {
-    if (!navigator.geolocation) return
-    navigator.geolocation.getCurrentPosition(
-      async ({ coords }) => {
-        try {
-          const response = await fetch(
-            `/api/restaurants?lat=${coords.latitude}&lng=${coords.longitude}`,
-          )
-          if (!response.ok) throw new Error(`HTTP ${response.status}`)
-          setRestaurants(await response.json())
-        } catch {
-          setError('errors.loadFailed')
-        }
-      },
-      () => setError('errors.locationDenied'),
-    )
-  }, [])
 
   // Google sends types like "japanese_restaurant". If we have no translation we show "japanese".
   const cuisineLabel = (type) =>

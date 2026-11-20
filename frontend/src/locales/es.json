@@ -11,6 +11,11 @@
   "reviews_one": "{{count}} opinión",
   "reviews_other": "{{count}} opiniones",
   "noPrice": "Sin precio",
+  "map": {
+    "title": "Restaurantes en el mapa",
+    "you": "Tu ubicación",
+    "openInGoogleMaps": "Ver en Google Maps"
+  },
   "auth": {
     "loginTitle": "Iniciar sesión",
     "registerTitle": "Crear cuenta",
