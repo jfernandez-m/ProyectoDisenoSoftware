@@ -18,12 +18,13 @@ La idea es una app web para encontrar lugares donde comer según tus gustos y d�
 - Las cuentas y sesiones las maneja Supabase Auth: guarda las contraseñas con hash bcrypt, nunca en texto plano
 - Botón para cerrar sesión, con el nombre (o correo) del usuario en el menú
 - Página de mapa (`/map`) con Google Maps: tu ubicación, los restaurantes cercanos y, al hacer clic en uno, su nombre, calificación, dirección y un link para abrirlo en Google Maps
+- Listas "Quiero ir" y "Ya fui": cada tarjeta tiene dos botones para guardar el restaurante, y la página `/lists` muestra las dos listas. Se guardan en Supabase y cada usuario solo ve las suyas
 
 ## Qué falta
 
 - Recomendaciones basadas en lo que has buscado y calificado
 - Reseñas de Google y un resumen de lo que más se comenta
-- Listas de restaurantes visitados y pendientes, que se pueden compartir con un link
+- Compartir una lista con un link
 
 ## Cómo funciona
 

@@ -4,5 +4,8 @@
   "type": "module",
   "scripts": {
     "start": "vercel dev --listen 3001"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.119.2"
   }
 }
