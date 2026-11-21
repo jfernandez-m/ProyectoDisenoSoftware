@@ -2,15 +2,14 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate } from 'react-router'
 import { useAuth } from '../auth/AuthContext.jsx'
-import GoogleButton from '../components/GoogleButton.jsx'
 
 function LoginPage() {
   const { t } = useTranslation()
   const { user, login, register, loginWithGoogle } = useAuth()
   const [mode, setMode] = useState('login') // 'login' or 'register'
-  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState('') // backend error code, translated when shown
+  const [error, setError] = useState('') // Supabase error code, translated when shown
   const [sending, setSending] = useState(false)
 
   // Already logged in (or just logged in): go to the home page.
@@ -33,7 +32,7 @@ function LoginPage() {
 
   function handleSubmit(event) {
     event.preventDefault() // stop the browser from reloading the page
-    run(() => (isRegister ? register : login)(username, password))
+    run(() => (isRegister ? register : login)(email, password))
   }
 
   function switchMode() {
@@ -45,23 +44,27 @@ function LoginPage() {
     <section className="auth-card">
       <h1>{t(isRegister ? 'auth.registerTitle' : 'auth.loginTitle')}</h1>
 
-      <GoogleButton onCredential={(credential) => run(() => loginWithGoogle(credential))} />
+      <button
+        type="button"
+        className="button-google"
+        onClick={() => run(loginWithGoogle)}
+        disabled={sending}
+      >
+        {t('auth.google')}
+      </button>
       <p className="divider">{t('auth.or')}</p>
 
       <form className="auth-form" onSubmit={handleSubmit}>
         <label>
-          {t('auth.username')}
-          {/* Same rules as the backend, so the browser warns before sending. */}
+          {t('auth.email')}
           <input
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
-            autoComplete="username"
-            pattern="[A-Za-z0-9_]{3,20}"
-            title={t('auth.usernameHint')}
+            type="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            autoComplete="email"
             required
           />
         </label>
-        {isRegister && <small className="muted">{t('auth.usernameHint')}</small>}
 
         <label>
           {t('auth.password')}
@@ -71,7 +74,7 @@ function LoginPage() {
             onChange={(event) => setPassword(event.target.value)}
             autoComplete={isRegister ? 'new-password' : 'current-password'}
             minLength={isRegister ? 8 : undefined}
-            maxLength={128}
+            maxLength={72}
             required
           />
         </label>

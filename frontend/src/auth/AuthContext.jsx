@@ -1,49 +1,47 @@
 import { createContext, useContext, useEffect, useState } from 'react'
+import { supabase } from '../supabase.js'
 
 const AuthContext = createContext(null)
 
-// POSTs JSON to the backend; the session cookie travels on its own (same origin thanks to the Vite proxy).
-// On failure it throws the backend's error code (e.g. "invalidCredentials") so the page can translate it.
-async function postJson(path, body) {
-  let response
-  try {
-    response = await fetch(path, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    })
-  } catch {
-    throw new Error('network')
-  }
-  const data = response.status === 204 ? null : await response.json().catch(() => null)
-  if (!response.ok) throw new Error(data?.error ?? 'network')
-  return data
+// Supabase's user has the name in different places depending on how they signed up.
+function toUser(session) {
+  if (!session) return null
+  const { email, user_metadata: metadata } = session.user
+  return { email, name: metadata.full_name ?? metadata.name ?? email }
 }
 
-// Shares who is logged in with every page, so each page doesn't have to ask the backend.
+// Supabase answers with { error } instead of throwing; we throw its code so the page can translate it.
+function throwIfError({ error }) {
+  if (error) throw new Error(error.code ?? 'network')
+}
+
+// Shares who is logged in with every page. Supabase keeps the session (in localStorage)
+// and tells us whenever it changes: login, logout, token refresh, or coming back from Google.
 export function AuthProvider({ children }) {
-  // undefined = still asking the backend, null = not logged in, object = logged in.
+  // undefined = still asking Supabase, null = not logged in, object = logged in.
   const [user, setUser] = useState(undefined)
 
   useEffect(() => {
-    fetch('/api/auth/me')
-      .then((response) => (response.ok ? response.json() : null))
-      .then(setUser)
-      .catch(() => setUser(null))
+    // Fires right away with the current session, and again on every change.
+    const { data } = supabase.auth.onAuthStateChange((_event, session) => setUser(toUser(session)))
+    return () => data.subscription.unsubscribe()
   }, [])
 
   const value = {
     user,
-    login: async (username, password) =>
-      setUser(await postJson('/api/auth/login', { username, password })),
-    register: async (username, password) =>
-      setUser(await postJson('/api/auth/register', { username, password })),
-    loginWithGoogle: async (credential) =>
-      setUser(await postJson('/api/auth/google', { credential })),
-    logout: async () => {
-      await postJson('/api/auth/logout', {})
-      setUser(null)
-    },
+    login: async (email, password) =>
+      throwIfError(await supabase.auth.signInWithPassword({ email, password })),
+    register: async (email, password) =>
+      throwIfError(await supabase.auth.signUp({ email, password })),
+    // Leaves our site for Google; Supabase brings the user back here already logged in.
+    loginWithGoogle: async () =>
+      throwIfError(
+        await supabase.auth.signInWithOAuth({
+          provider: 'google',
+          options: { redirectTo: window.location.origin },
+        }),
+      ),
+    logout: async () => throwIfError(await supabase.auth.signOut()),
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

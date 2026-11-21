@@ -5,6 +5,7 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   plugins: [react()],
   server: {
-    proxy: { '/api': 'http://localhost:8000' },
+    // Locally, /api goes to the backend (`npm start` in backend/, port 3001).
+    proxy: { '/api': 'http://localhost:3001' },
   },
 })

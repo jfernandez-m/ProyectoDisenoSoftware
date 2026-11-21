@@ -1,0 +1,8 @@
+{
+  "name": "entre-platos-backend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "vercel dev --listen 3001"
+  }
+}

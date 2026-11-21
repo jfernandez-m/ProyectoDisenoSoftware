@@ -36,7 +36,7 @@ function MapPage() {
               <Pin background="#1a73e8" borderColor="#0b4fa8" glyphColor="#ffffff" />
             </AdvancedMarker>
 
-            {/* Our backend sends { latitude, longitude }; Google Maps expects { lat, lng }. */}
+            {/* Our /api function sends { latitude, longitude }; Google Maps expects { lat, lng }. */}
             {(restaurants ?? []).map((restaurant) => (
               <AdvancedMarker
                 key={restaurant.id}

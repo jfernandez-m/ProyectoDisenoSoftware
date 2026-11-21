@@ -249,6 +249,23 @@ body {
   cursor: wait;
 }
 
+/* White button with a border, like Google's own sign-in button. */
+.button-google {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  font: inherit;
+  font-weight: 600;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.button-google:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
 .auth-card .button-link {
   margin-top: var(--space-3);
   padding: 0;
