@@ -38,6 +38,11 @@
     "title": "{{list}} · {{name}}'s list",
     "notFound": "This list doesn't exist or is no longer shared."
   },
+  "ratings": {
+    "yours": "Your rating:",
+    "rate_one": "Rate {{count}} star",
+    "rate_other": "Rate {{count}} stars"
+  },
   "auth": {
     "loginTitle": "Log in",
     "registerTitle": "Create account",
@@ -66,6 +71,7 @@
   "errors": {
     "noGeolocation": "Your browser does not support geolocation.",
     "locationDenied": "We need your location to find nearby restaurants.",
-    "loadFailed": "Could not load restaurants. Try again later."
+    "loadFailed": "Could not load restaurants. Try again later.",
+    "saveFailed": "Could not save. Try again."
   }
 }
