@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router'
 import { AdvancedMarker, APIProvider, InfoWindow, Map, Pin } from '@vis.gl/react-google-maps'
 import { useNearbyRestaurants } from '../hooks/useNearbyRestaurants.js'
 
@@ -52,7 +53,9 @@ function MapPage() {
                 pixelOffset={[0, -40]}
                 onCloseClick={() => setSelected(null)}
               >
-                <strong>{selected.name}</strong>
+                <Link to={`/restaurant/${selected.id}`}>
+                  <strong>{selected.name}</strong>
+                </Link>
                 {selected.rating && (
                   <p>
                     ★{' '}

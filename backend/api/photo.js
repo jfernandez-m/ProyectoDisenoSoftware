@@ -8,8 +8,11 @@ export async function GET(request) {
     return Response.json({ error: 'invalid photo name' }, { status: 400 })
   }
 
+  // 600 px for the cards, 1200 px for the big photos on the restaurant page.
+  const size = new URL(request.url).searchParams.get('size') === '1200' ? 1200 : 600
+
   const response = await fetch(
-    `https://places.googleapis.com/v1/${name}/media?maxWidthPx=600&key=${process.env.GOOGLE_PLACES_API_KEY}`,
+    `https://places.googleapis.com/v1/${name}/media?maxWidthPx=${size}&key=${process.env.GOOGLE_PLACES_API_KEY}`,
   )
   if (!response.ok) {
     console.error(`Places photo error ${response.status}`)

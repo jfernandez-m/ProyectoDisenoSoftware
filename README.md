@@ -21,11 +21,11 @@ La idea es una app web para encontrar lugares donde comer según tus gustos y d�
 - Listas "Quiero ir" y "Ya fui": cada tarjeta tiene dos botones para guardar el restaurante, y la página `/lists` muestra las dos listas. Se guardan en Supabase y cada usuario solo ve las suyas
 - Compartir una lista con un link (`/share/<id>`): cualquiera con el link la ve sin iniciar sesión. El link usa un id aleatorio, así que no se pueden adivinar los de otros
 - Calificar restaurantes con 1 a 5 estrellas ("Tu nota") en Inicio y en Listas. Se guarda una nota por usuario y restaurante; hacer clic en la misma estrella la borra
+- Página de cada restaurante (`/restaurant/<id>`), al hacer clic en su nombre desde Inicio, Mapa o Listas: fotos grandes, datos, link a Google Maps, mapa con su ubicación, tu nota y los botones de listas (si iniciaste sesión), y las reseñas de Google con un resumen de lo que más se comenta, escrito por Gemini. Las reseñas llegan en el idioma de la página
 
 ## Qué falta
 
 - Recomendaciones basadas en lo que has buscado y calificado
-- Reseñas de Google y un resumen de lo que más se comenta
 
 ## Cómo funciona
 
