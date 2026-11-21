@@ -56,6 +56,18 @@
     "notFound": "No encontramos este restaurante.",
     "loginToSave": "Inicia sesión para calificarlo o guardarlo en tus listas"
   },
+  "recommendations": {
+    "title": "Recomendado para ti",
+    "yourTaste": "Tus gustos: {{cuisines}}",
+    "noProfile": "Califica o guarda restaurantes en tus listas para recibir recomendaciones a tu gusto. Mientras tanto, estos son los mejor evaluados cerca.",
+    "none": "No encontramos restaurantes nuevos cerca para recomendarte.",
+    "failed": "No se pudieron cargar las recomendaciones.",
+    "because": {
+      "cuisine": "Porque te gusta: {{cuisine}}",
+      "price": "Porque sueles elegir {{price}}",
+      "topRated": "Muy bien evaluado"
+    }
+  },
   "auth": {
     "loginTitle": "Iniciar sesión",
     "registerTitle": "Crear cuenta",

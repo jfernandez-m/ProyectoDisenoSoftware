@@ -56,6 +56,18 @@
     "notFound": "We couldn't find this restaurant.",
     "loginToSave": "Log in to rate it or save it to your lists"
   },
+  "recommendations": {
+    "title": "Recommended for you",
+    "yourTaste": "Your taste: {{cuisines}}",
+    "noProfile": "Rate restaurants or save them to your lists to get recommendations to your taste. Meanwhile, these are the best rated nearby.",
+    "none": "We couldn't find new restaurants nearby to recommend.",
+    "failed": "Could not load the recommendations.",
+    "because": {
+      "cuisine": "Because you like: {{cuisine}}",
+      "price": "Because you usually pick {{price}}",
+      "topRated": "Very well rated"
+    }
+  },
   "auth": {
     "loginTitle": "Log in",
     "registerTitle": "Create account",

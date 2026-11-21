@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useParams } from 'react-router'
 import { AdvancedMarker, APIProvider, Map } from '@vis.gl/react-google-maps'
+import { apiFetch } from '../api.js'
 import { useAuth } from '../auth/AuthContext.jsx'
 import GoogleRating from '../components/GoogleRating.jsx'
 import ListButtons from '../components/ListButtons.jsx'
@@ -22,6 +23,7 @@ function RestaurantPage() {
   const [place, setPlace] = useState(null)
   const [error, setError] = useState(false)
   const lang = i18n.resolvedLanguage
+  const email = user?.email
 
   // Load again if the restaurant or the language changes (reviews come in the page's language).
   useEffect(() => {
@@ -30,6 +32,13 @@ function RestaurantPage() {
       .then(setPlace)
       .catch(() => setError(true))
   }, [id, lang])
+
+  // With a session, remember that the user opened this restaurant: the recommender learns from it.
+  // If it fails the user doesn't need to know, so we ignore the error.
+  useEffect(() => {
+    if (!email || !place) return
+    apiFetch('/api/views', { method: 'POST', body: JSON.stringify({ place }) }).catch(() => {})
+  }, [email, place])
 
   if (error) return <p role="alert">{t('restaurant.notFound')}</p>
   if (!place) return <p>{t('loading')}</p>

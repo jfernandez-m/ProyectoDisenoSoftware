@@ -434,3 +434,16 @@ a.card-name:hover {
   height: 300px;
   min-height: 0;
 }
+
+/* --- Recommendations --- */
+
+.recommendations {
+  margin-bottom: var(--space-5);
+}
+
+/* Why we recommend it: same red as the stars, so it stands out on the card. */
+.reason {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--color-primary);
+}
