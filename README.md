@@ -22,10 +22,7 @@ La idea es una app web para encontrar lugares donde comer según tus gustos y d�
 - Compartir una lista con un link (`/share/<id>`): cualquiera con el link la ve sin iniciar sesión. El link usa un id aleatorio, así que no se pueden adivinar los de otros
 - Calificar restaurantes con 1 a 5 estrellas ("Tu nota") en Inicio y en Listas. Se guarda una nota por usuario y restaurante; hacer clic en la misma estrella la borra
 - Página de cada restaurante (`/restaurant/<id>`), al hacer clic en su nombre desde Inicio, Mapa o Listas: fotos grandes, datos, link a Google Maps, mapa con su ubicación, tu nota y los botones de listas (si iniciaste sesión), y las reseñas de Google con un resumen de lo que más se comenta, escrito por Gemini. Las reseñas llegan en el idioma de la página
-
-## Qué falta
-
-- Recomendaciones basadas en lo que has buscado y calificado
+- Recomendaciones personalizadas ("Recomendado para ti", en Inicio con sesión iniciada). El backend arma tu perfil de gustos con tus notas, tus listas y los restaurantes que abriste: cada señal suma puntos al tipo de comida y al rango de precio (5★ +2, 4★ +1, 3★ 0, 2★ −1, 1★ −2; en una lista +1; abierto +0,5). Después busca restaurantes cerca (los más populares y los de tus 3 tipos de comida favoritos), deja fuera los que ya calificaste o visitaste, y ordena con `2 × puntos del tipo de comida + puntos del precio + (rating de Google − 4)`. Cada recomendación dice por qué aparece
 
 ## Cómo funciona
 

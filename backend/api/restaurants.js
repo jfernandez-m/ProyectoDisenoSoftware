@@ -1,51 +1,7 @@
 // Backend (Vercel Function): GET /api/restaurants?lat=..&lng=..&radius=..
 // Runs on Vercel's server, so the Places API key never reaches the browser.
 
-import { PLACE_FIELDS, toRestaurant } from '../lib/places.js'
-
-const PLACES_URL = 'https://places.googleapis.com/v1/places:searchNearby'
-
-// searchNearby returns a list, so every field goes under "places.".
-const FIELD_MASK = PLACE_FIELDS.map((field) => `places.${field}`).join(',')
-
-// A hotel with a restaurant inside also matches "restaurant"; we drop it by its main type.
-const LODGING_TYPES = [
-  'hotel',
-  'lodging',
-  'resort_hotel',
-  'extended_stay_hotel',
-  'motel',
-  'hostel',
-  'inn',
-  'bed_and_breakfast',
-  'guest_house',
-]
-
-// Finds restaurants inside a circle (radius in meters) around a coordinate.
-async function searchNearbyRestaurants(latitude, longitude, radius) {
-  const response = await fetch(PLACES_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Goog-Api-Key': process.env.GOOGLE_PLACES_API_KEY,
-      'X-Goog-FieldMask': FIELD_MASK,
-    },
-    body: JSON.stringify({
-      includedTypes: ['restaurant'],
-      excludedPrimaryTypes: LODGING_TYPES,
-      maxResultCount: 5,
-      locationRestriction: { circle: { center: { latitude, longitude }, radius } },
-    }),
-  })
-
-  if (!response.ok) {
-    throw new Error(`Places API error ${response.status}: ${await response.text()}`)
-  }
-
-  const data = await response.json()
-  // Google returns {} when nothing matches, so we default to an empty list.
-  return (data.places ?? []).map((place) => toRestaurant(place, 4))
-}
+import { searchNearby } from '../lib/places.js'
 
 export async function GET(request) {
   const url = new URL(request.url)
@@ -64,7 +20,7 @@ export async function GET(request) {
   }
 
   try {
-    return Response.json(await searchNearbyRestaurants(latitude, longitude, radius))
+    return Response.json(await searchNearby({ latitude, longitude, radius, max: 5 }))
   } catch (error) {
     // 502: the external service (Google) failed, not our server.
     console.error(error)
