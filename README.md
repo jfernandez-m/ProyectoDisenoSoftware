@@ -19,12 +19,12 @@ La idea es una app web para encontrar lugares donde comer según tus gustos y d�
 - Botón para cerrar sesión, con el nombre (o correo) del usuario en el menú
 - Página de mapa (`/map`) con Google Maps: tu ubicación, los restaurantes cercanos y, al hacer clic en uno, su nombre, calificación, dirección y un link para abrirlo en Google Maps
 - Listas "Quiero ir" y "Ya fui": cada tarjeta tiene dos botones para guardar el restaurante, y la página `/lists` muestra las dos listas. Se guardan en Supabase y cada usuario solo ve las suyas
+- Compartir una lista con un link (`/share/<id>`): cualquiera con el link la ve sin iniciar sesión. El link usa un id aleatorio, así que no se pueden adivinar los de otros
 
 ## Qué falta
 
 - Recomendaciones basadas en lo que has buscado y calificado
 - Reseñas de Google y un resumen de lo que más se comenta
-- Compartir una lista con un link
 
 ## Cómo funciona
 
@@ -65,7 +65,13 @@ cd backend
 cp .env.example .env
 ```
 
-En `backend/.env` pon tu `GOOGLE_PLACES_API_KEY`. Después:
+En `backend/.env` pon:
+
+- `GOOGLE_PLACES_API_KEY`: la key de Places.
+- `SUPABASE_URL` y `SUPABASE_PUBLISHABLE_KEY`: los mismos valores que en el frontend.
+- `SUPABASE_SECRET_KEY`: en Supabase → Project Settings → API Keys → Secret keys. Se salta las reglas de acceso, así que solo va en el backend; el endpoint de listas compartidas la usa para leer solo la lista del link.
+
+Después:
 
 ```bash
 npm start
@@ -100,7 +106,7 @@ Abre `http://localhost:5173` y acepta el permiso de ubicación. Vite le pasa las
 
 Son dos proyectos de Vercel desde el mismo repositorio:
 
-1. **Backend**: Add New → Project, importa el repo, **Root Directory** `backend`, variable `GOOGLE_PLACES_API_KEY`. Deploy y copia su URL.
+1. **Backend**: Add New → Project, importa el repo, **Root Directory** `backend`, las 4 variables de `backend/.env`. Deploy y copia su URL.
 2. En `frontend/vercel.json`, reemplaza `YOUR-BACKEND.vercel.app` por esa URL y haz commit.
 3. **Frontend**: Add New → Project, mismo repo, **Root Directory** `frontend`, variables `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY` y `VITE_GOOGLE_MAPS_API_KEY`. Deploy.
 4. Agrega la URL del frontend en Supabase (Redirect URLs) y en las restricciones de la key de Maps.

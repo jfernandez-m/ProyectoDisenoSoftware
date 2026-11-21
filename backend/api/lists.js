@@ -1,23 +1,8 @@
 // Backend (Vercel Function): /api/lists
 // GET: my list items. POST: add a restaurant or move it to the other list. DELETE: remove it.
-import { createClient } from '@supabase/supabase-js'
+import { authenticate } from '../lib/supabase.js'
 
 const STATUSES = ['visited', 'pending']
-
-// Supabase client that acts as the logged-in user, so Row Level Security only
-// lets them touch their own rows. Returns null if the token is missing or invalid.
-async function authenticate(request) {
-  const token = (request.headers.get('Authorization') ?? '').replace('Bearer ', '')
-  if (!token) return null
-
-  const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_PUBLISHABLE_KEY, {
-    global: { headers: { Authorization: `Bearer ${token}` } },
-    auth: { persistSession: false },
-  })
-  const { data, error } = await supabase.auth.getUser(token)
-  if (error) return null
-  return { supabase, user: data.user }
-}
 
 // 401: we don't know who is asking.
 const unauthorized = () => Response.json({ error: 'not logged in' }, { status: 401 })

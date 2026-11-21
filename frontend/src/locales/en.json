@@ -30,7 +30,13 @@
     "visited": "Been there",
     "pendingTitle": "Want to go",
     "visitedTitle": "Been there",
-    "empty": "No restaurants here yet."
+    "empty": "No restaurants here yet.",
+    "share": "Share list",
+    "copied": "Link copied:"
+  },
+  "share": {
+    "title": "{{list}} · {{name}}'s list",
+    "notFound": "This list doesn't exist or is no longer shared."
   },
   "auth": {
     "loginTitle": "Log in",
