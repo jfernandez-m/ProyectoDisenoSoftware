@@ -20,6 +20,7 @@ La idea es una app web para encontrar lugares donde comer según tus gustos y d�
 - Página de mapa (`/map`) con Google Maps: tu ubicación, los restaurantes cercanos y, al hacer clic en uno, su nombre, calificación, dirección y un link para abrirlo en Google Maps
 - Listas "Quiero ir" y "Ya fui": cada tarjeta tiene dos botones para guardar el restaurante, y la página `/lists` muestra las dos listas. Se guardan en Supabase y cada usuario solo ve las suyas
 - Compartir una lista con un link (`/share/<id>`): cualquiera con el link la ve sin iniciar sesión. El link usa un id aleatorio, así que no se pueden adivinar los de otros
+- Calificar restaurantes con 1 a 5 estrellas ("Tu nota") en Inicio y en Listas. Se guarda una nota por usuario y restaurante; hacer clic en la misma estrella la borra
 
 ## Qué falta
 

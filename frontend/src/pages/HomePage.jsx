@@ -2,7 +2,9 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../auth/AuthContext.jsx'
 import ListButtons from '../components/ListButtons.jsx'
+import StarRating from '../components/StarRating.jsx'
 import { useLists } from '../hooks/useLists.js'
+import { useRatings } from '../hooks/useRatings.js'
 import { useNearbyRestaurants } from '../hooks/useNearbyRestaurants.js'
 
 // Google's price levels mapped to the symbols we show. PRICE_LEVEL_FREE is left out on purpose.
@@ -18,6 +20,7 @@ function HomePage() {
   const { restaurants, error } = useNearbyRestaurants()
   const { user } = useAuth()
   const lists = useLists()
+  const ratings = useRatings()
   const [price, setPrice] = useState('') // '' = any price
   const [cuisine, setCuisine] = useState('') // '' = any cuisine
 
@@ -112,7 +115,12 @@ function HomePage() {
                 {PRICE_LABELS[restaurant.priceLevel] ?? t('noPrice')}
               </span>
               <span className="muted">{restaurant.address}</span>
-              {user && <ListButtons place={restaurant} lists={lists} />}
+              {user && (
+                <>
+                  <StarRating place={restaurant} ratings={ratings} />
+                  <ListButtons place={restaurant} lists={lists} />
+                </>
+              )}
             </div>
           </li>
         ))}

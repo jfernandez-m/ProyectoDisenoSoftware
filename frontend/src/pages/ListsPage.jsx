@@ -5,7 +5,9 @@ import { apiFetch } from '../api.js'
 import { useAuth } from '../auth/AuthContext.jsx'
 import ListButtons from '../components/ListButtons.jsx'
 import SavedRestaurantCard from '../components/SavedRestaurantCard.jsx'
+import StarRating from '../components/StarRating.jsx'
 import { useLists } from '../hooks/useLists.js'
+import { useRatings } from '../hooks/useRatings.js'
 
 // A saved row back in the same shape as /api/restaurants, so ListButtons works with it.
 const toPlace = (item) => ({
@@ -22,6 +24,7 @@ function ListsPage() {
   const { t } = useTranslation()
   const { user } = useAuth()
   const lists = useLists()
+  const ratings = useRatings()
   const [links, setLinks] = useState({}) // status -> share link
 
   // Asks the backend for the link and copies it to the clipboard.
@@ -57,6 +60,7 @@ function ListsPage() {
             <ul className="restaurant-list">
               {items.map((item) => (
                 <SavedRestaurantCard key={item.place_id} item={item}>
+                  <StarRating place={toPlace(item)} ratings={ratings} />
                   <ListButtons place={toPlace(item)} lists={lists} />
                 </SavedRestaurantCard>
               ))}

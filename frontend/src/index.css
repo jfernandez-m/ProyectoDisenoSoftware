@@ -311,3 +311,28 @@ body {
   background: var(--color-primary);
   border-color: var(--color-primary);
 }
+
+/* --- Ratings --- */
+
+.my-rating {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  margin-top: var(--space-2);
+}
+
+.star-button {
+  padding: 0 2px;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--color-border);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Same red as Google's stars: filled up to the user's rating. */
+.star-button[aria-pressed='true'] {
+  color: var(--color-primary);
+}

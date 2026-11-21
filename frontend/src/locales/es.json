@@ -38,6 +38,11 @@
     "title": "{{list}} · lista de {{name}}",
     "notFound": "Esta lista no existe o ya no se comparte."
   },
+  "ratings": {
+    "yours": "Tu nota:",
+    "rate_one": "Calificar con {{count}} estrella",
+    "rate_other": "Calificar con {{count}} estrellas"
+  },
   "auth": {
     "loginTitle": "Iniciar sesión",
     "registerTitle": "Crear cuenta",
@@ -66,7 +71,8 @@
   "errors": {
     "noGeolocation": "Tu navegador no permite obtener la ubicación.",
     "locationDenied": "Necesitamos tu ubicación para buscar restaurantes cercanos.",
-    "loadFailed": "No se pudieron cargar los restaurantes. Intenta de nuevo más tarde."
+    "loadFailed": "No se pudieron cargar los restaurantes. Intenta de nuevo más tarde.",
+    "saveFailed": "No se pudo guardar. Intenta de nuevo."
   },
   "cuisine": {
     "restaurant": "restaurante",
