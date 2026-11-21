@@ -1,34 +1,15 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useAuth } from '../auth/AuthContext.jsx'
-import ListButtons from '../components/ListButtons.jsx'
-import StarRating from '../components/StarRating.jsx'
-import { useLists } from '../hooks/useLists.js'
-import { useRatings } from '../hooks/useRatings.js'
+import { Link } from 'react-router'
+import GoogleRating from '../components/GoogleRating.jsx'
+import { cuisineLabel, PRICE_LABELS } from '../format.js'
 import { useNearbyRestaurants } from '../hooks/useNearbyRestaurants.js'
 
-// Google's price levels mapped to the symbols we show. PRICE_LEVEL_FREE is left out on purpose.
-const PRICE_LABELS = {
-  PRICE_LEVEL_INEXPENSIVE: '$',
-  PRICE_LEVEL_MODERATE: '$$',
-  PRICE_LEVEL_EXPENSIVE: '$$$',
-  PRICE_LEVEL_VERY_EXPENSIVE: '$$$$',
-}
-
 function HomePage() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const { restaurants, error } = useNearbyRestaurants()
-  const { user } = useAuth()
-  const lists = useLists()
-  const ratings = useRatings()
   const [price, setPrice] = useState('') // '' = any price
   const [cuisine, setCuisine] = useState('') // '' = any cuisine
-
-  // Google sends types like "japanese_restaurant". If we have no translation we show "japanese".
-  const cuisineLabel = (type) =>
-    t(`cuisine.${type}`, {
-      defaultValue: type.replace(/_restaurant$/, '').replaceAll('_', ' '),
-    })
 
   // shortcut: filters the 10 results already loaded, move it to /api/restaurants when we ask Google for more.
   const visible = (restaurants ?? []).filter(
@@ -59,7 +40,7 @@ function HomePage() {
           <option value="">{t('filters.any')}</option>
           {cuisines.map((type) => (
             <option key={type} value={type}>
-              {cuisineLabel(type)}
+              {cuisineLabel(t, type)}
             </option>
           ))}
         </select>
@@ -89,38 +70,16 @@ function HomePage() {
               )}
             </div>
             <div className="card-body">
-              <strong className="card-name">{restaurant.name}</strong>
-              {restaurant.rating ? (
-                <span className="rating">
-                  {/* --rating tells the CSS how much of the five stars to paint. */}
-                  <span className="stars" style={{ '--rating': restaurant.rating }} aria-hidden="true">
-                    ★★★★★
-                  </span>
-                  {/* toLocaleString uses Intl: "4,5" in Spanish, "4.5" in English. */}
-                  <strong>
-                    {restaurant.rating.toLocaleString(i18n.language, {
-                      minimumFractionDigits: 1,
-                      maximumFractionDigits: 1,
-                    })}
-                  </strong>
-                  <span className="muted">
-                    ({t('reviews', { count: restaurant.ratingCount })})
-                  </span>
-                </span>
-              ) : (
-                <span className="muted">{t('noRating')}</span>
-              )}
+              {/* The name opens the restaurant page: big photos, map, reviews and your lists. */}
+              <Link to={`/restaurant/${restaurant.id}`} className="card-name">
+                {restaurant.name}
+              </Link>
+              <GoogleRating rating={restaurant.rating} count={restaurant.ratingCount} />
               <span>
-                {restaurant.cuisine && `${cuisineLabel(restaurant.cuisine)} · `}
+                {restaurant.cuisine && `${cuisineLabel(t, restaurant.cuisine)} · `}
                 {PRICE_LABELS[restaurant.priceLevel] ?? t('noPrice')}
               </span>
               <span className="muted">{restaurant.address}</span>
-              {user && (
-                <>
-                  <StarRating place={restaurant} ratings={ratings} />
-                  <ListButtons place={restaurant} lists={lists} />
-                </>
-              )}
             </div>
           </li>
         ))}

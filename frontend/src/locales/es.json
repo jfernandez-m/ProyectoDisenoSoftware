@@ -43,6 +43,19 @@
     "rate_one": "Calificar con {{count}} estrella",
     "rate_other": "Calificar con {{count}} estrellas"
   },
+  "googleReviews": {
+    "summary": "Lo que más se comenta",
+    "none": "Este restaurante todavía no tiene reseñas.",
+    "stars_one": "{{count}} estrella",
+    "stars_other": "{{count}} estrellas"
+  },
+  "restaurant": {
+    "back": "Volver",
+    "location": "Ubicación",
+    "reviews": "Reseñas",
+    "notFound": "No encontramos este restaurante.",
+    "loginToSave": "Inicia sesión para calificarlo o guardarlo en tus listas"
+  },
   "auth": {
     "loginTitle": "Iniciar sesión",
     "registerTitle": "Crear cuenta",

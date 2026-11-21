@@ -1,3 +1,5 @@
+import { Link } from 'react-router'
+
 // Card for a restaurant saved in a list. children = extra content, like the list buttons.
 function SavedRestaurantCard({ item, children }) {
   return (
@@ -13,7 +15,9 @@ function SavedRestaurantCard({ item, children }) {
         <div className="card-photo" />
       )}
       <div className="card-body">
-        <strong className="card-name">{item.name}</strong>
+        <Link to={`/restaurant/${item.place_id}`} className="card-name">
+          {item.name}
+        </Link>
         <span className="muted">{item.address}</span>
         {children}
       </div>

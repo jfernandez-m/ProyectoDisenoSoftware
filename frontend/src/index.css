@@ -336,3 +336,101 @@ body {
 .star-button[aria-pressed='true'] {
   color: var(--color-primary);
 }
+
+/* --- Google reviews --- */
+
+/* The AI summary stands out from the individual reviews. */
+.review-summary {
+  margin-top: var(--space-2);
+  padding: var(--space-2);
+  background: var(--color-bg);
+  border-radius: 8px;
+}
+
+.review-summary p,
+.review-list p {
+  margin: 4px 0;
+}
+
+.review-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.review-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-size: 0.875rem;
+}
+
+.review-stars {
+  color: var(--color-primary);
+}
+
+/* --- Restaurant page --- */
+
+/* The name on the cards is a link but keeps the look of a title. */
+a.card-name {
+  font-weight: 700;
+  color: inherit;
+  text-decoration: none;
+}
+
+a.card-name:hover {
+  text-decoration: underline;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: var(--space-3);
+}
+
+/* Big photos: one per screen on phones, and a peek of the next one on wider screens. */
+.gallery {
+  display: flex;
+  gap: var(--space-2);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+
+.gallery-photo {
+  flex: 0 0 100%;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: var(--color-border);
+  border-radius: 12px;
+  scroll-snap-align: start;
+}
+
+@media (min-width: 768px) {
+  .gallery-photo {
+    flex-basis: 75%;
+    width: 75%;
+  }
+}
+
+.restaurant-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+  margin: var(--space-3) 0;
+}
+
+.restaurant-info h1 {
+  margin: 0;
+}
+
+/* Smaller than the map page; written after .map so it wins. */
+.map-small {
+  height: 300px;
+  min-height: 0;
+}

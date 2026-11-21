@@ -43,6 +43,19 @@
     "rate_one": "Rate {{count}} star",
     "rate_other": "Rate {{count}} stars"
   },
+  "googleReviews": {
+    "summary": "What people say most",
+    "none": "This restaurant has no reviews yet.",
+    "stars_one": "{{count}} star",
+    "stars_other": "{{count}} stars"
+  },
+  "restaurant": {
+    "back": "Back",
+    "location": "Location",
+    "reviews": "Reviews",
+    "notFound": "We couldn't find this restaurant.",
+    "loginToSave": "Log in to rate it or save it to your lists"
+  },
   "auth": {
     "loginTitle": "Log in",
     "registerTitle": "Create account",

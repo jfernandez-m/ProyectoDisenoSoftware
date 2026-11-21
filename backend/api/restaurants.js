@@ -1,20 +1,12 @@
 // Backend (Vercel Function): GET /api/restaurants?lat=..&lng=..&radius=..
 // Runs on Vercel's server, so the Places API key never reaches the browser.
 
+import { PLACE_FIELDS, toRestaurant } from '../lib/places.js'
+
 const PLACES_URL = 'https://places.googleapis.com/v1/places:searchNearby'
 
-// We only ask for the fields we use: Google charges by the fields requested.
-const FIELD_MASK = [
-  'places.id',
-  'places.displayName',
-  'places.formattedAddress',
-  'places.location',
-  'places.primaryType',
-  'places.rating',
-  'places.priceLevel',
-  'places.userRatingCount',
-  'places.photos',
-].join(',')
+// searchNearby returns a list, so every field goes under "places.".
+const FIELD_MASK = PLACE_FIELDS.map((field) => `places.${field}`).join(',')
 
 // A hotel with a restaurant inside also matches "restaurant"; we drop it by its main type.
 const LODGING_TYPES = [
@@ -52,19 +44,7 @@ async function searchNearbyRestaurants(latitude, longitude, radius) {
 
   const data = await response.json()
   // Google returns {} when nothing matches, so we default to an empty list.
-  // We convert to our own shape so the frontend doesn't depend on Google's format.
-  return (data.places ?? []).map((place) => ({
-    id: place.id,
-    name: place.displayName?.text,
-    address: place.formattedAddress,
-    location: place.location,
-    cuisine: place.primaryType,
-    rating: place.rating ?? null,
-    priceLevel: place.priceLevel ?? null,
-    ratingCount: place.userRatingCount ?? 0,
-    // Names of the first 4 photos; each image is fetched later from /api/photo.
-    photos: (place.photos ?? []).slice(0, 4).map((photo) => photo.name),
-  }))
+  return (data.places ?? []).map((place) => toRestaurant(place, 4))
 }
 
 export async function GET(request) {
