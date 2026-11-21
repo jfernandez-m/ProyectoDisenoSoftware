@@ -1,9 +1,17 @@
 {
   "brand": "Entre Platos",
   "language": "Idioma",
-  "nav": { "home": "Inicio", "map": "Mapa", "lists": "Listas" },
+  "nav": {
+    "home": "Inicio",
+    "map": "Mapa",
+    "lists": "Listas"
+  },
   "title": "Restaurantes cercanos",
-  "filters": { "price": "Precio", "cuisine": "Tipo de comida", "any": "Todos" },
+  "filters": {
+    "price": "Precio",
+    "cuisine": "Tipo de comida",
+    "any": "Todos"
+  },
   "loading": "Cargando…",
   "noMatches": "Ningún restaurante coincide con estos filtros.",
   "noRating": "Sin calificación",
@@ -20,9 +28,8 @@
     "loginTitle": "Iniciar sesión",
     "registerTitle": "Crear cuenta",
     "or": "o",
-    "username": "Nombre de usuario",
+    "email": "Correo",
     "password": "Contraseña",
-    "usernameHint": "Entre 3 y 20 caracteres: letras, números o _",
     "passwordHint": "Al menos 8 caracteres",
     "login": "Iniciar sesión",
     "register": "Crear cuenta",
@@ -30,18 +37,22 @@
     "sending": "Enviando…",
     "noAccount": "¿No tienes cuenta? Créala aquí",
     "haveAccount": "¿Ya tienes cuenta? Inicia sesión",
+    "google": "Continuar con Google",
     "errors": {
-      "invalidInput": "Revisa el nombre de usuario y la contraseña.",
-      "usernameTaken": "Ese nombre de usuario ya existe.",
-      "invalidCredentials": "Usuario o contraseña incorrectos.",
-      "invalidGoogleToken": "No se pudo verificar tu cuenta de Google.",
-      "network": "No se pudo conectar con el servidor. ¿Está encendido el backend?"
+      "invalid_credentials": "Correo o contraseña incorrectos.",
+      "user_already_exists": "Ya existe una cuenta con ese correo.",
+      "email_exists": "Ya existe una cuenta con ese correo.",
+      "weak_password": "La contraseña es muy débil. Usa al menos 8 caracteres.",
+      "email_address_invalid": "Ese correo no es válido.",
+      "validation_failed": "Revisa el correo y la contraseña.",
+      "over_request_rate_limit": "Demasiados intentos. Espera un momento y prueba de nuevo.",
+      "network": "No se pudo conectar con el servidor. Revisa tu conexión."
     }
   },
   "errors": {
     "noGeolocation": "Tu navegador no permite obtener la ubicación.",
     "locationDenied": "Necesitamos tu ubicación para buscar restaurantes cercanos.",
-    "loadFailed": "No se pudieron cargar los restaurantes. ¿Está encendido el backend?"
+    "loadFailed": "No se pudieron cargar los restaurantes. Intenta de nuevo más tarde."
   },
   "cuisine": {
     "restaurant": "restaurante",

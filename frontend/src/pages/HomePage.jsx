@@ -22,7 +22,7 @@ function HomePage() {
       defaultValue: type.replace(/_restaurant$/, '').replaceAll('_', ' '),
     })
 
-  // shortcut: filters the 10 results already loaded, move it to the backend when we ask Google for more.
+  // shortcut: filters the 10 results already loaded, move it to /api/restaurants when we ask Google for more.
   const visible = (restaurants ?? []).filter(
     (r) => (!price || r.priceLevel === price) && (!cuisine || r.cuisine === cuisine),
   )

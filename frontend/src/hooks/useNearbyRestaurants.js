@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-// Asks the browser for the user's location and loads the nearby restaurants from our backend.
+// Asks the browser for the user's location and loads the nearby restaurants from our /api/restaurants function.
 // Shared by the list (HomePage) and the map (MapPage) so both pages work the same way.
 export function useNearbyRestaurants() {
   const [position, setPosition] = useState(null) // { lat, lng } of the user
