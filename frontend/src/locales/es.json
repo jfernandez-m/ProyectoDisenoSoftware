@@ -24,6 +24,14 @@
     "you": "Tu ubicación",
     "openInGoogleMaps": "Ver en Google Maps"
   },
+  "lists": {
+    "title": "Mis listas",
+    "pending": "Quiero ir",
+    "visited": "Ya fui",
+    "pendingTitle": "Quiero ir",
+    "visitedTitle": "Ya fui",
+    "empty": "Todavía no hay restaurantes aquí."
+  },
   "auth": {
     "loginTitle": "Iniciar sesión",
     "registerTitle": "Crear cuenta",
