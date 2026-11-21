@@ -30,7 +30,13 @@
     "visited": "Ya fui",
     "pendingTitle": "Quiero ir",
     "visitedTitle": "Ya fui",
-    "empty": "Todavía no hay restaurantes aquí."
+    "empty": "Todavía no hay restaurantes aquí.",
+    "share": "Compartir lista",
+    "copied": "Link copiado:"
+  },
+  "share": {
+    "title": "{{list}} · lista de {{name}}",
+    "notFound": "Esta lista no existe o ya no se comparte."
   },
   "auth": {
     "loginTitle": "Iniciar sesión",
