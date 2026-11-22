@@ -82,6 +82,17 @@
     "noAccount": "No account? Create one here",
     "haveAccount": "Already have an account? Log in",
     "google": "Continue with Google",
+    "forgotPassword": "Forgot your password?",
+    "forgotTitle": "Reset password",
+    "forgotHint": "Enter your account's email and we'll send you a link to create a new password.",
+    "sendResetLink": "Send link",
+    "resetSent": "If there is an account for {{email}}, you'll get an email with the link. Check your spam folder too.",
+    "backToLogin": "Back to log in",
+    "resetTitle": "New password",
+    "newPassword": "New password",
+    "savePassword": "Save password",
+    "resetDone": "Done, your password changed and you are logged in.",
+    "resetInvalid": "This link was already used or expired. Ask for a new one.",
     "errors": {
       "invalid_credentials": "Wrong email or password.",
       "user_already_exists": "An account with that email already exists.",
@@ -90,6 +101,8 @@
       "email_address_invalid": "That email is not valid.",
       "validation_failed": "Check the email and password.",
       "over_request_rate_limit": "Too many attempts. Wait a moment and try again.",
+      "over_email_send_rate_limit": "Too many emails were sent. Wait a few minutes and try again.",
+      "same_password": "The new password must be different from the old one.",
       "network": "Could not reach the server. Check your connection."
     }
   },

@@ -82,6 +82,17 @@
     "noAccount": "¿No tienes cuenta? Créala aquí",
     "haveAccount": "¿Ya tienes cuenta? Inicia sesión",
     "google": "Continuar con Google",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "forgotTitle": "Recuperar contraseña",
+    "forgotHint": "Escribe el correo de tu cuenta y te enviaremos un link para crear una contraseña nueva.",
+    "sendResetLink": "Enviar link",
+    "resetSent": "Si existe una cuenta con {{email}}, te llegará un correo con el link. Revisa también la carpeta de spam.",
+    "backToLogin": "Volver a iniciar sesión",
+    "resetTitle": "Nueva contraseña",
+    "newPassword": "Contraseña nueva",
+    "savePassword": "Guardar contraseña",
+    "resetDone": "Listo, tu contraseña cambió y ya iniciaste sesión.",
+    "resetInvalid": "Este link ya se usó o venció. Pide uno nuevo.",
     "errors": {
       "invalid_credentials": "Correo o contraseña incorrectos.",
       "user_already_exists": "Ya existe una cuenta con ese correo.",
@@ -90,6 +101,8 @@
       "email_address_invalid": "Ese correo no es válido.",
       "validation_failed": "Revisa el correo y la contraseña.",
       "over_request_rate_limit": "Demasiados intentos. Espera un momento y prueba de nuevo.",
+      "over_email_send_rate_limit": "Se enviaron demasiados correos. Espera unos minutos y prueba de nuevo.",
+      "same_password": "La contraseña nueva tiene que ser distinta de la anterior.",
       "network": "No se pudo conectar con el servidor. Revisa tu conexión."
     }
   },

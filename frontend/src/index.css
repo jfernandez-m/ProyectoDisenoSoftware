@@ -266,6 +266,14 @@ body {
   cursor: wait;
 }
 
+/* Small links inside the login card ("Forgot your password?", "Back to log in"). */
+.auth-link {
+  display: inline-block;
+  align-self: flex-start;
+  margin-top: var(--space-2);
+  font-size: var(--font-sm);
+}
+
 .auth-card .button-link {
   margin-top: var(--space-3);
   padding: 0;

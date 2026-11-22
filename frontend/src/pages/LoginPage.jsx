@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Navigate } from 'react-router'
+import { Link, Navigate } from 'react-router'
 import { useAuth } from '../auth/AuthContext.jsx'
 
 function LoginPage() {
@@ -79,6 +79,11 @@ function LoginPage() {
           />
         </label>
         {isRegister && <small className="muted">{t('auth.passwordHint')}</small>}
+        {!isRegister && (
+          <Link to="/forgot-password" className="auth-link">
+            {t('auth.forgotPassword')}
+          </Link>
+        )}
 
         {error && (
           <p role="alert" className="form-error">
