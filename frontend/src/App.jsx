@@ -1,9 +1,11 @@
 import { Route, Routes } from 'react-router'
 import Layout from './components/Layout.jsx'
 import HomePage from './pages/HomePage.jsx'
+import ForgotPasswordPage from './pages/ForgotPasswordPage.jsx'
 import ListsPage from './pages/ListsPage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import MapPage from './pages/MapPage.jsx'
+import ResetPasswordPage from './pages/ResetPasswordPage.jsx'
 import RestaurantPage from './pages/RestaurantPage.jsx'
 import SharedListPage from './pages/SharedListPage.jsx'
 
@@ -18,6 +20,8 @@ function App() {
         <Route path="/restaurant/:id" element={<RestaurantPage />} />
         <Route path="/share/:id" element={<SharedListPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
       </Route>
     </Routes>
   )

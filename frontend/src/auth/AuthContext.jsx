@@ -42,6 +42,15 @@ export function AuthProvider({ children }) {
         }),
       ),
     logout: async () => throwIfError(await supabase.auth.signOut()),
+    // Sends an email with a one-time link back to /reset-password.
+    resetPassword: async (email) =>
+      throwIfError(
+        await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/reset-password`,
+        }),
+      ),
+    // Changes the password of the user in the current session (the one the email link started).
+    updatePassword: async (password) => throwIfError(await supabase.auth.updateUser({ password })),
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
