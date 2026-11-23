@@ -1,248 +1,248 @@
 # Entre Platos
 
-Recomendador de restaurantes personalizado. Proyecto individual para Diseño de Software (TICS316-2-2026), UAI. Tema 1.
+Personalized restaurant recommender. Individual project for Software Design (TICS316-2-2026), UAI. Topic 1.
 
-**En producción:** https://entre-platos.vercel.app
+**In production:** https://entre-platos.vercel.app
 
-Una app web para encontrar dónde comer según tus gustos y dónde estás. Muestra los restaurantes cercanos en una lista y en un mapa, deja guardarlos en listas, calificarlos y compartir las listas, y con todo eso aprende tus gustos para recomendarte lugares nuevos. Mientras más usas la app, mejores son las recomendaciones.
+A web app to find where to eat based on your taste and where you are. It shows nearby restaurants in a list and on a map, lets you save them to lists, rate them and share the lists, and uses all of that to learn your taste and recommend new places. The more you use the app, the better the recommendations get.
 
-## Índice
+## Contents
 
-- [Funcionalidades](#funcionalidades)
-- [Requisitos del curso](#requisitos-del-curso)
-- [Arquitectura](#arquitectura)
-- [Páginas](#páginas)
-- [Endpoints del backend](#endpoints-del-backend)
-- [Base de datos](#base-de-datos)
-- [Recomendador](#recomendador)
-- [Estructura del proyecto](#estructura-del-proyecto)
-- [Configuración](#configuración)
-- [Cómo correrlo localmente](#cómo-correrlo-localmente)
-- [Desplegar en Vercel](#desplegar-en-vercel)
-- [Tecnologías](#tecnologías)
+- [Features](#features)
+- [Course requirements](#course-requirements)
+- [Architecture](#architecture)
+- [Pages](#pages)
+- [Backend endpoints](#backend-endpoints)
+- [Database](#database)
+- [Recommender](#recommender)
+- [Project structure](#project-structure)
+- [Setup](#setup)
+- [Running it locally](#running-it-locally)
+- [Deploying to Vercel](#deploying-to-vercel)
+- [Technologies](#technologies)
 
-## Funcionalidades
+## Features
 
-### Restaurantes cercanos (Inicio, `/`)
+### Nearby restaurants (Home, `/`)
 
-- Pide permiso de ubicación al navegador y busca los 5 restaurantes más populares en 1 km a la redonda (Google Places API).
-- Cada restaurante es una tarjeta con hasta 4 fotos que se deslizan, la calificación de Google en estrellas, cuántas opiniones tiene, el tipo de comida, el precio y la dirección.
-- Filtros por precio ($ a $$$$) y por tipo de comida (27 tipos comunes en Chile, en `frontend/src/format.js`). Con un filtro, el backend busca los 5 restaurantes **más cercanos** que lo cumplen, aunque estén a más de 1 km: si pides mariscos y cerca solo hay pizzerías, igual aparecen los lugares de mariscos más cercanos. Sin filtros, se muestran los 5 más populares en 1 km.
-- Mensajes claros mientras carga, si no das permiso de ubicación, si la búsqueda falla o si ningún restaurante calza con los filtros.
-- Con sesión iniciada, cada tarjeta tiene además los botones de listas y "Tu nota", y debajo aparece "Recomendado para ti".
+- Asks the browser for location permission and finds the 5 most popular restaurants within 1 km (Google Places API).
+- Each restaurant is a card with up to 4 swipeable photos, the Google rating in stars, how many reviews it has, the cuisine, the price and the address.
+- Filters by price ($ to $$$$) and by cuisine (27 types common in Chile, in `frontend/src/format.js`). With a filter, the backend finds the 5 **nearest** restaurants that match it, even if they are more than 1 km away: if you ask for seafood and only pizzerias are close by, the nearest seafood places still show up. Without filters, it shows the 5 most popular within 1 km.
+- Clear messages while loading, if you don't grant location permission, if the search fails or if no restaurant matches the filters.
+- When logged in, each card also has the list buttons and "Your rating", and "Recommended for you" appears below.
 
-### Mapa (`/map`)
+### Map (`/map`)
 
-- Google Maps con tu ubicación y los restaurantes cercanos.
-- Al hacer clic en un restaurante: nombre, calificación, dirección y un link para abrirlo en Google Maps (cómo llegar, horarios, etc.).
+- Google Maps with your location and the nearby restaurants.
+- Clicking a restaurant shows its name, rating, address and a link to open it in Google Maps (directions, opening hours, etc.).
 
-### Página de cada restaurante (`/restaurant/<id>`)
+### Restaurant page (`/restaurant/<id>`)
 
-- Se abre al hacer clic en el nombre desde Inicio, Mapa, Listas o una lista compartida.
-- Hasta 10 fotos grandes, datos del restaurante, link a Google Maps y un mapa pequeño con su ubicación.
-- Con sesión iniciada: tu nota y los botones de listas.
-- **Reseñas de Google:** un resumen de lo que más se comenta, escrito por Gemini (la IA de Google), y hasta 5 reseñas con autor, estrellas y fecha. Llegan en el idioma de la página.
-- Abrir la página queda registrado (con sesión) y cuenta para las recomendaciones.
+- Opens when you click the name from Home, Map, Lists or a shared list.
+- Up to 10 large photos, restaurant details, a link to Google Maps and a small map with its location.
+- When logged in: your rating and the list buttons.
+- **Google reviews:** a summary of what people mention most, written by Gemini (Google's AI), and up to 5 reviews with author, stars and date. They come in the page's language.
+- Opening the page is recorded (when logged in) and counts toward recommendations.
 
-### Cuentas (`/login`, `/forgot-password`, `/reset-password`)
+### Accounts (`/login`, `/forgot-password`, `/reset-password`)
 
-- **Login con Google (SSO)** o con **cuenta propia** de correo y contraseña. Desde la misma página se crea la cuenta (contraseña de 8 a 72 caracteres).
-- Las cuentas y sesiones las maneja Supabase Auth: las contraseñas se guardan con hash bcrypt, nunca en texto plano.
-- Errores traducidos: correo o contraseña incorrectos, correo ya registrado, contraseña débil, sin conexión.
-- **Recuperar contraseña:** "¿Olvidaste tu contraseña?" manda un correo con un link de un solo uso a `/reset-password`, donde se elige una contraseña nueva. La respuesta es la misma exista o no la cuenta, para que nadie pueda averiguar quién está registrado.
-- En el menú aparece el nombre (o el correo) del usuario y el botón para cerrar sesión.
+- **Log in with Google (SSO)** or with **your own account** using email and password. The account is created from the same page (password of 8 to 72 characters).
+- Accounts and sessions are handled by Supabase Auth: passwords are stored as bcrypt hashes, never in plain text.
+- Translated errors: wrong email or password, email already registered, weak password, no connection.
+- **Password recovery:** "Forgot your password?" sends an email with a single-use link to `/reset-password`, where you choose a new password. The response is the same whether or not the account exists, so nobody can find out who is registered.
+- The menu shows the user's name (or email) and the log out button.
 
-### Listas (`/lists`)
+### Lists (`/lists`)
 
-- Dos listas: **"Quiero ir"** y **"Ya fui"**. Cada tarjeta tiene los dos botones; apretar el que está activo saca el restaurante de la lista, y apretar el otro lo cambia de lista.
-- La página `/lists` muestra las dos listas con las fotos y datos de cada restaurante.
-- Se guardan en Supabase y cada usuario solo ve las suyas (Row Level Security).
+- Two lists: **"Want to go"** and **"Been there"**. Each card has both buttons; pressing the active one removes the restaurant from the list, and pressing the other one moves it to that list.
+- The `/lists` page shows both lists with the photos and details of each restaurant.
+- They are stored in Supabase and each user only sees their own (Row Level Security).
 
-### Compartir listas (`/share/<id>`)
+### Sharing lists (`/share/<id>`)
 
-- Botón "Compartir" en cada lista: crea un link y lo copia al portapapeles.
-- Cualquiera con el link ve la lista sin iniciar sesión, con el nombre de quien la comparte (nunca su correo).
-- El id del link es aleatorio (uuid), así que no se pueden adivinar los links de otros. Cada lista tiene siempre el mismo link.
+- A "Share list" button on each list: it creates a link and copies it to the clipboard.
+- Anyone with the link sees the list without logging in, with the name of whoever shared it (never their email).
+- The link id is random (uuid), so other people's links can't be guessed. Each list always has the same link.
 
-### Calificar restaurantes
+### Rating restaurants
 
-- "Tu nota": de 1 a 5 estrellas, en Inicio, Listas y la página de cada restaurante.
-- Una nota por usuario y restaurante: volver a calificar la reemplaza, y hacer clic en la misma estrella la borra.
+- "Your rating": 1 to 5 stars, on Home, Lists and each restaurant's page.
+- One rating per user and restaurant: rating again replaces it, and clicking the same star deletes it.
 
-### Recomendaciones personalizadas ("Recomendado para ti")
+### Personalized recommendations ("Recommended for you")
 
-- En Inicio, con sesión iniciada, debajo de los restaurantes cercanos.
-- Aprende tus gustos de tus notas, tus listas y los restaurantes que abriste, y recomienda 5 restaurantes cercanos que todavía no calificaste ni visitaste.
-- Muestra tus tipos de comida favoritos ("Tus gustos: ...") y, en cada recomendación, por qué aparece ("Porque te gusta: Japonesa", "Porque sueles elegir $$", o que está muy bien evaluado en Google).
-- Detalle del cálculo en [Recomendador](#recomendador).
+- On Home, when logged in, below the nearby restaurants.
+- Learns your taste from your ratings, your lists and the restaurants you opened, and recommends 5 nearby restaurants you haven't rated or visited yet.
+- Shows your favorite cuisines ("Your taste: ...") and, on each recommendation, why it appears ("Because you like: Japanese", "Because you usually pick $$", or that it is very well rated on Google).
+- Details of the calculation in [Recommender](#recommender).
 
-### Idiomas
+### Languages
 
-- Español e inglés, con textos propios (no traducción automática) en `frontend/src/locales/`.
-- Selector de idioma en el menú. La elección se recuerda para la próxima visita y actualiza `<html lang>`.
-- Los datos de Google (tipos de comida, reseñas, resumen de Gemini) también llegan en el idioma elegido.
+- Spanish and English, with our own texts (no machine translation) in `frontend/src/locales/`.
+- Language selector in the menu. The choice is remembered for the next visit and updates `<html lang>`.
+- Google's data (cuisines, reviews, Gemini summary) also comes in the chosen language.
 
-### Diseño responsive
+### Responsive design
 
-- Se adapta a celular, tablet y computador: la grilla de tarjetas pasa de 1 a varias columnas, el menú se acomoda en pantallas angostas, y el mapa y las fotos cambian de tamaño según la pantalla.
+- Adapts to phone, tablet and computer: the card grid goes from 1 to several columns, the menu rearranges on narrow screens, and the map and photos resize with the screen.
 
-## Requisitos del curso
+## Course requirements
 
-| Requisito | Dónde se cumple |
+| Requirement | Where it is met |
 | --- | --- |
-| Recomendar restaurantes según gustos y ubicación | `backend/api/recommendations.js` + `frontend/src/components/Recommendations.jsx` |
-| Buscar restaurantes cercanos | `backend/api/restaurants.js` (Google Places) + `HomePage` y `MapPage` |
-| Listas "Quiero ir" / "Ya fui" | `backend/api/lists.js`, tabla `list_items`, `ListsPage` |
-| Compartir listas | `backend/api/share.js`, tabla `shared_lists`, `SharedListPage` |
-| Calificar restaurantes | `backend/api/ratings.js`, tabla `ratings`, `StarRating` |
-| Reseñas | `backend/api/place.js` (reseñas + resumen de Gemini), `Reviews` |
-| Login con SSO | Google vía Supabase Auth (`AuthContext.loginWithGoogle`) |
-| Login propio | Correo y contraseña vía Supabase Auth, con registro y recuperación de contraseña |
-| Idiomas propios (es/en) | i18next con `locales/es.json` y `locales/en.json` |
-| Responsive | `frontend/src/index.css` (grid `auto-fill`, `flex-wrap`, media queries) |
-| Código en inglés | Todo el código, nombres y comentarios están en inglés; la interfaz, en es/en |
-| Desplegado | Vercel (frontend y backend) + Supabase |
+| Recommend restaurants based on taste and location | `backend/api/recommendations.js` + `frontend/src/components/Recommendations.jsx` |
+| Search nearby restaurants | `backend/api/restaurants.js` (Google Places) + `HomePage` and `MapPage` |
+| "Want to go" / "Been there" lists | `backend/api/lists.js`, `list_items` table, `ListsPage` |
+| Share lists | `backend/api/share.js`, `shared_lists` table, `SharedListPage` |
+| Rate restaurants | `backend/api/ratings.js`, `ratings` table, `StarRating` |
+| Reviews | `backend/api/place.js` (reviews + Gemini summary), `Reviews` |
+| SSO login | Google via Supabase Auth (`AuthContext.loginWithGoogle`) |
+| Own login | Email and password via Supabase Auth, with sign-up and password recovery |
+| Own languages (es/en) | i18next with `locales/es.json` and `locales/en.json` |
+| Responsive | `frontend/src/index.css` (`auto-fill` grid, `flex-wrap`, media queries) |
+| Code in English | All code, names and comments are in English; the interface is in es/en |
+| Deployed | Vercel (frontend and backend) + Supabase |
 
-## Arquitectura
+## Architecture
 
 ```
-Navegador (frontend, React)
+Browser (frontend, React)
  ├─ /api/... ─────────────────────> backend (Vercel Functions)
- │                                    ├─ Google Places API (restaurantes, fotos, reseñas)
- │                                    └─ Supabase Postgres (listas, notas, vistas, links)
- ├─ login / registro / Google ────> Supabase Auth ──> Google (SSO)
- └─ mapa ─────────────────────────> Google Maps JavaScript API
+ │                                    ├─ Google Places API (restaurants, photos, reviews)
+ │                                    └─ Supabase Postgres (lists, ratings, views, links)
+ ├─ login / sign-up / Google ─────> Supabase Auth ──> Google (SSO)
+ └─ map ──────────────────────────> Google Maps JavaScript API
 ```
 
-Frontend y backend son dos proyectos separados en Vercel, desde el mismo repositorio:
+Frontend and backend are two separate Vercel projects from the same repository:
 
-- **`backend/`** tiene las llaves secretas (Places y la secret key de Supabase). Solo las leen las funciones de `backend/api/`, que corren en el servidor; nunca llegan al navegador.
-- **`frontend/`** solo tiene llaves públicas: la URL y la publishable key de Supabase y la key de Maps (por eso empiezan con `VITE_`).
-- El frontend llama a `/api/...` en su propio dominio y Vercel (o Vite, en local) le pasa la llamada al backend (`frontend/vercel.json`). Así el navegador nunca habla directo con el backend y no hace falta CORS.
-- **Sesión:** el frontend inicia sesión con Supabase y manda el token en cada llamada (`Authorization: Bearer ...`, en `frontend/src/api.js`). El backend lo valida y consulta Supabase *como ese usuario*, así que las reglas de Row Level Security solo le dejan tocar sus propias filas.
-- **Costos de Google:** el backend solo pide los campos que usa (field masks) y las fotos y reseñas quedan en caché del navegador (un día y una hora).
+- **`backend/`** holds the secret keys (Places and the Supabase secret key). Only the functions in `backend/api/` read them, and those run on the server; they never reach the browser.
+- **`frontend/`** only has public keys: the Supabase URL and publishable key and the Maps key (that's why they start with `VITE_`).
+- The frontend calls `/api/...` on its own domain and Vercel (or Vite, locally) forwards the call to the backend (`frontend/vercel.json`). This way the browser never talks to the backend directly and CORS isn't needed.
+- **Session:** the frontend logs in with Supabase and sends the token on every call (`Authorization: Bearer ...`, in `frontend/src/api.js`). The backend validates it and queries Supabase *as that user*, so the Row Level Security rules only let it touch that user's own rows.
+- **Google costs:** the backend only requests the fields it uses (field masks), and photos and reviews are cached by the browser (one day and one hour).
 
-## Páginas
+## Pages
 
-| Ruta | Página | Sesión | Qué muestra |
+| Route | Page | Session | What it shows |
 | --- | --- | --- | --- |
-| `/` | `HomePage` | Opcional | Restaurantes cercanos con filtros; con sesión, notas, listas y recomendaciones |
-| `/map` | `MapPage` | No | Mapa con tu ubicación y los restaurantes cercanos |
-| `/restaurant/:id` | `RestaurantPage` | Opcional | Fotos, datos, mapa y reseñas de un restaurante; con sesión, nota y listas |
-| `/lists` | `ListsPage` | Sí | Tus listas "Quiero ir" y "Ya fui", con botón para compartir |
-| `/share/:id` | `SharedListPage` | No | Una lista compartida, pública para quien tenga el link |
-| `/login` | `LoginPage` | No | Login y registro, con Google o correo y contraseña |
-| `/forgot-password` | `ForgotPasswordPage` | No | Pide el correo para mandar el link de recuperación |
-| `/reset-password` | `ResetPasswordPage` | Link del correo | Elegir una contraseña nueva |
+| `/` | `HomePage` | Optional | Nearby restaurants with filters; when logged in, ratings, lists and recommendations |
+| `/map` | `MapPage` | No | Map with your location and the nearby restaurants |
+| `/restaurant/:id` | `RestaurantPage` | Optional | Photos, details, map and reviews of a restaurant; when logged in, rating and lists |
+| `/lists` | `ListsPage` | Yes | Your "Want to go" and "Been there" lists, with a share button |
+| `/share/:id` | `SharedListPage` | No | A shared list, public to anyone with the link |
+| `/login` | `LoginPage` | No | Log in and sign up, with Google or email and password |
+| `/forgot-password` | `ForgotPasswordPage` | No | Asks for the email to send the recovery link |
+| `/reset-password` | `ResetPasswordPage` | Email link | Choose a new password |
 
-## Endpoints del backend
+## Backend endpoints
 
-Cada archivo de `backend/api/` es una Vercel Function y su nombre es la ruta. "Sesión: Sí" significa que sin token válido responde `401`.
+Each file in `backend/api/` is a Vercel Function and its name is the route. "Session: Yes" means it responds `401` without a valid token.
 
-| Método y ruta | Sesión | Qué hace |
+| Method and route | Session | What it does |
 | --- | --- | --- |
-| `GET /api/restaurants?lat=&lng=&radius=&cuisine=&price=` | No | Sin filtros: los 5 más populares en el radio (por defecto 1000 m). Con `cuisine` (tipo de Google) o `price`: los 5 más cercanos que cumplen el filtro. Google no filtra por precio, así que el precio se filtra en el backend sobre los 20 más populares en 5 km |
-| `GET /api/photo?name=&size=600\|1200` | No | Una foto de Google, sin exponer la key. Solo acepta nombres de fotos reales |
-| `GET /api/place?id=&lang=es\|en` | No | Un restaurante: datos, hasta 10 fotos, ubicación, 5 reseñas y el resumen de Gemini |
-| `GET /api/lists` | Sí | Tus restaurantes guardados en listas |
-| `POST /api/lists` | Sí | Agrega un restaurante a una lista o lo cambia de lista |
-| `DELETE /api/lists?placeId=` | Sí | Saca un restaurante de tus listas |
-| `POST /api/share` | Sí | Crea (o devuelve) el link para compartir una de tus listas |
-| `GET /api/share?id=` | No | La lista compartida de ese link |
-| `GET /api/ratings` | Sí | Tus notas |
-| `POST /api/ratings` | Sí | Califica un restaurante (1 a 5) o cambia la nota |
-| `DELETE /api/ratings?placeId=` | Sí | Borra tu nota |
-| `POST /api/views` | Sí | Registra que abriste la página de un restaurante |
-| `GET /api/recommendations?lat=&lng=` | Sí | Tu perfil de gustos y 5 recomendaciones con su motivo |
+| `GET /api/restaurants?lat=&lng=&radius=&cuisine=&price=` | No | Without filters: the 5 most popular within the radius (default 1000 m). With `cuisine` (Google type) or `price`: the 5 nearest that match the filter. Google doesn't filter by price, so the backend filters the price over the 20 most popular within 5 km |
+| `GET /api/photo?name=&size=600\|1200` | No | A Google photo, without exposing the key. Only accepts real photo names |
+| `GET /api/place?id=&lang=es\|en` | No | One restaurant: details, up to 10 photos, location, 5 reviews and the Gemini summary |
+| `GET /api/lists` | Yes | Your restaurants saved in lists |
+| `POST /api/lists` | Yes | Adds a restaurant to a list or moves it to the other list |
+| `DELETE /api/lists?placeId=` | Yes | Removes a restaurant from your lists |
+| `POST /api/share` | Yes | Creates (or returns) the link to share one of your lists |
+| `GET /api/share?id=` | No | The shared list for that link |
+| `GET /api/ratings` | Yes | Your ratings |
+| `POST /api/ratings` | Yes | Rates a restaurant (1 to 5) or changes the rating |
+| `DELETE /api/ratings?placeId=` | Yes | Deletes your rating |
+| `POST /api/views` | Yes | Records that you opened a restaurant's page |
+| `GET /api/recommendations?lat=&lng=` | Yes | Your taste profile and 5 recommendations with their reason |
 
-Códigos de error: `400` parámetros que faltan o son inválidos, `401` sin sesión, `404` no existe, `502` falló Google o Supabase.
+Error codes: `400` missing or invalid parameters, `401` no session, `404` not found, `502` Google or Supabase failed.
 
-## Base de datos
+## Database
 
-Postgres en Supabase. El SQL completo está en [`backend/supabase/schema.sql`](backend/supabase/schema.sql): se corre una vez en Supabase → SQL Editor (se puede volver a correr sin duplicar nada). Las cuentas de usuario viven en `auth.users`, que maneja Supabase Auth.
+Postgres on Supabase. The full SQL is in [`backend/supabase/schema.sql`](backend/supabase/schema.sql): run it once in Supabase → SQL Editor (it can be run again without duplicating anything). User accounts live in `auth.users`, which Supabase Auth manages.
 
-| Tabla | Para qué | Columnas principales | Única por |
+| Table | Purpose | Main columns | Unique per |
 | --- | --- | --- | --- |
-| `list_items` | Restaurantes en "Quiero ir" (`pending`) o "Ya fui" (`visited`) | `user_id`, `place_id`, `status`, `name`, `address`, `cuisine`, `rating`, `price_level`, `photo` | usuario + restaurante |
-| `shared_lists` | Links para compartir listas; el `id` (uuid aleatorio) va en `/share/<id>` | `id`, `user_id`, `status`, `owner_name` | usuario + lista |
-| `ratings` | Tu nota de 1 a 5 estrellas | `user_id`, `place_id`, `stars`, `name`, `cuisine`, `price_level` | usuario + restaurante |
-| `views` | Restaurantes cuya página abriste | `user_id`, `place_id`, `cuisine`, `price_level`, `viewed_at` | usuario + restaurante |
+| `list_items` | Restaurants in "Want to go" (`pending`) or "Been there" (`visited`) | `user_id`, `place_id`, `status`, `name`, `address`, `cuisine`, `rating`, `price_level`, `photo` | user + restaurant |
+| `shared_lists` | Links to share lists; the `id` (random uuid) goes in `/share/<id>` | `id`, `user_id`, `status`, `owner_name` | user + list |
+| `ratings` | Your 1 to 5 star rating | `user_id`, `place_id`, `stars`, `name`, `cuisine`, `price_level` | user + restaurant |
+| `views` | Restaurants whose page you opened | `user_id`, `place_id`, `cuisine`, `price_level`, `viewed_at` | user + restaurant |
 
-- **Row Level Security** en todas las tablas: cada usuario solo puede leer y escribir sus filas (`(select auth.uid()) = user_id`).
-- `user_id` se llena solo con el usuario de la sesión y se borra en cascada si se borra la cuenta.
-- La única excepción es `GET /api/share`: la página pública no tiene sesión, así que usa la secret key (`service_role`) para leer **solo** la lista de ese link. Por eso `service_role` tiene permiso de lectura, y nada más, en `list_items` y `shared_lists`.
+- **Row Level Security** on every table: each user can only read and write their own rows (`(select auth.uid()) = user_id`).
+- `user_id` is filled in automatically with the session's user and is deleted in cascade if the account is deleted.
+- The only exception is `GET /api/share`: the public page has no session, so it uses the secret key (`service_role`) to read **only** the list for that link. That's why `service_role` has read permission, and nothing else, on `list_items` and `shared_lists`.
 
-## Recomendador
+## Recommender
 
-Filtrado basado en contenido, en `backend/api/recommendations.js`:
+Content-based filtering, in `backend/api/recommendations.js`:
 
-1. **Tu perfil de gustos.** Cada señal suma puntos al tipo de comida y al rango de precio del restaurante:
-   - Nota: 5★ +2, 4★ +1, 3★ 0, 2★ −1, 1★ −2
-   - Estar en una lista ("Quiero ir" o "Ya fui"): +1
-   - Haber abierto su página: +0,5
-2. **Candidatos.** Busca restaurantes en 2 km: los más populares y los de tus 3 tipos de comida favoritos.
-3. **Filtro.** Deja fuera los que ya calificaste o marcaste como visitados.
-4. **Puntaje.** `2 × puntos del tipo de comida + puntos del precio + (rating de Google − 4)`. El tipo de comida pesa el doble porque dice más de tus gustos que el precio.
-5. **Resultado.** Los 5 con más puntaje, cada uno con el motivo por el que aparece (tipo de comida, precio, o rating de Google ≥ 4,5). Sin datos tuyos todavía, todos los puntos son 0 y gana el rating de Google: la página lo explica y muestra los mejor evaluados cerca.
+1. **Your taste profile.** Each signal adds points to the restaurant's cuisine and price range:
+   - Rating: 5★ +2, 4★ +1, 3★ 0, 2★ −1, 1★ −2
+   - Being in a list ("Want to go" or "Been there"): +1
+   - Having opened its page: +0.5
+2. **Candidates.** Searches restaurants within 2 km: the most popular ones and those of your 3 favorite cuisines.
+3. **Filter.** Leaves out the ones you already rated or marked as visited.
+4. **Score.** `2 × cuisine points + price points + (Google rating − 4)`. Cuisine counts double because it says more about your taste than price.
+5. **Result.** The 5 with the highest score, each with the reason it appears (cuisine, price, or Google rating ≥ 4.5). With no data from you yet, all points are 0 and the Google rating wins: the page explains this and shows the best rated nearby.
 
-## Estructura del proyecto
+## Project structure
 
 ```
 .
 ├── README.md
-├── backend/                      API: proyecto de Vercel con Root Directory "backend"
-│   ├── .env.example              Variables del backend (sin valores)
-│   ├── package.json              "npm start" = vercel dev en el puerto 3001
-│   ├── api/                      Cada archivo es un endpoint /api/<nombre>
-│   │   ├── restaurants.js        Restaurantes cercanos
-│   │   ├── photo.js              Proxy de fotos de Google
-│   │   ├── place.js              Detalle de un restaurante + reseñas + resumen de Gemini
-│   │   ├── lists.js              Listas "Quiero ir" / "Ya fui"
-│   │   ├── share.js              Links para compartir listas
-│   │   ├── ratings.js            Notas de 1 a 5 estrellas
-│   │   ├── views.js              Restaurantes abiertos por el usuario
-│   │   └── recommendations.js    Recomendador
-│   ├── lib/                      Código compartido por los endpoints (no son endpoints)
-│   │   ├── places.js             Llamadas a Google Places y formato propio de restaurante
-│   │   └── supabase.js           authenticate() (cliente como el usuario) y admin() (secret key)
+├── backend/                      API: Vercel project with Root Directory "backend"
+│   ├── .env.example              Backend variables (without values)
+│   ├── package.json              "npm start" = vercel dev on port 3001
+│   ├── api/                      Each file is an endpoint /api/<name>
+│   │   ├── restaurants.js        Nearby restaurants
+│   │   ├── photo.js              Google photo proxy
+│   │   ├── place.js              Restaurant details + reviews + Gemini summary
+│   │   ├── lists.js              "Want to go" / "Been there" lists
+│   │   ├── share.js              Links to share lists
+│   │   ├── ratings.js            1 to 5 star ratings
+│   │   ├── views.js              Restaurants opened by the user
+│   │   └── recommendations.js    Recommender
+│   ├── lib/                      Code shared by the endpoints (not endpoints)
+│   │   ├── places.js             Google Places calls and our own restaurant format
+│   │   └── supabase.js           authenticate() (client as the user) and admin() (secret key)
 │   └── supabase/
-│       └── schema.sql            Tablas, Row Level Security y permisos
-└── frontend/                     App en React: proyecto de Vercel con Root Directory "frontend"
-    ├── .env.example              Variables del frontend (sin valores)
-    ├── index.html                HTML base, título e ícono
-    ├── package.json              Dependencias y scripts (dev, build, lint)
-    ├── vite.config.js            Vite + proxy de /api al backend en local
-    ├── vercel.json               En producción: /api → backend, el resto → index.html
-    ├── eslint.config.js          Reglas de ESLint
+│       └── schema.sql            Tables, Row Level Security and permissions
+└── frontend/                     React app: Vercel project with Root Directory "frontend"
+    ├── .env.example              Frontend variables (without values)
+    ├── index.html                Base HTML, title and icon
+    ├── package.json              Dependencies and scripts (dev, build, lint)
+    ├── vite.config.js            Vite + local proxy from /api to the backend
+    ├── vercel.json               In production: /api → backend, everything else → index.html
+    ├── eslint.config.js          ESLint rules
     ├── public/
-    │   └── favicon.png           Ícono de la pestaña
+    │   └── favicon.png           Tab icon
     └── src/
-        ├── main.jsx              Punto de entrada: monta React con el router y la sesión
-        ├── App.jsx               Rutas de la app
-        ├── api.js                apiFetch(): fetch al backend con el token de la sesión
-        ├── supabase.js           Cliente de Supabase del navegador
-        ├── i18n.js               Configuración de idiomas (recuerda la elección)
-        ├── format.js             Precios ($ a $$$$), tipos de comida del filtro y sus nombres
-        ├── index.css             Todos los estilos y variables de diseño
+        ├── main.jsx              Entry point: mounts React with the router and the session
+        ├── App.jsx               App routes
+        ├── api.js                apiFetch(): fetch to the backend with the session token
+        ├── supabase.js           Browser Supabase client
+        ├── i18n.js               Language setup (remembers the choice)
+        ├── format.js             Prices ($ to $$$$), filter cuisines and their names
+        ├── index.css             All styles and design variables
         ├── locales/
-        │   ├── es.json           Textos en español
-        │   └── en.json           Textos en inglés
+        │   ├── es.json           Spanish texts
+        │   └── en.json           English texts
         ├── auth/
-        │   └── AuthContext.jsx   Sesión: login, registro, Google, logout, recuperar contraseña
+        │   └── AuthContext.jsx   Session: login, sign-up, Google, logout, password recovery
         ├── hooks/
-        │   ├── useNearbyRestaurants.js   Ubicación + restaurantes cercanos
-        │   ├── useLists.js               Listas del usuario
-        │   ├── useRatings.js             Notas del usuario
-        │   └── useRecommendations.js     Recomendaciones
+        │   ├── useNearbyRestaurants.js   Location + nearby restaurants
+        │   ├── useLists.js               User's lists
+        │   ├── useRatings.js             User's ratings
+        │   └── useRecommendations.js     Recommendations
         ├── components/
-        │   ├── Layout.jsx                Menú (links, idioma, usuario) y página actual
-        │   ├── RestaurantCard.jsx        Tarjeta de restaurante en Inicio
-        │   ├── SavedRestaurantCard.jsx   Tarjeta de restaurante guardado en una lista
-        │   ├── GoogleRating.jsx          Estrellas y cantidad de opiniones de Google
-        │   ├── StarRating.jsx            "Tu nota": 5 estrellas clicables
-        │   ├── ListButtons.jsx           Botones "Quiero ir" / "Ya fui"
-        │   ├── Reviews.jsx               Resumen de Gemini y reseñas
-        │   └── Recommendations.jsx       "Recomendado para ti"
+        │   ├── Layout.jsx                Menu (links, language, user) and current page
+        │   ├── RestaurantCard.jsx        Restaurant card on Home
+        │   ├── SavedRestaurantCard.jsx   Card of a restaurant saved in a list
+        │   ├── GoogleRating.jsx          Google stars and review count
+        │   ├── StarRating.jsx            "Your rating": 5 clickable stars
+        │   ├── ListButtons.jsx           "Want to go" / "Been there" buttons
+        │   ├── Reviews.jsx               Gemini summary and reviews
+        │   └── Recommendations.jsx       "Recommended for you"
         └── pages/
             ├── HomePage.jsx              /
             ├── MapPage.jsx               /map
@@ -254,26 +254,26 @@ Filtrado basado en contenido, en `backend/api/recommendations.js`:
             └── ResetPasswordPage.jsx     /reset-password
 ```
 
-Los archivos `.env` con las llaves reales no están en el repositorio (`.gitignore`); solo los `.env.example`.
+The `.env` files with the real keys are not in the repository (`.gitignore`); only the `.env.example` files are.
 
-## Configuración
+## Setup
 
-Necesitas [Node.js](https://nodejs.org) 20 o superior, una cuenta en [Vercel](https://vercel.com), un proyecto en [Supabase](https://supabase.com) y un proyecto en Google Cloud con:
+You need [Node.js](https://nodejs.org) 20 or later, a [Vercel](https://vercel.com) account, a [Supabase](https://supabase.com) project and a Google Cloud project with:
 
-- Una **API key** con **Places API (New)** activada. Es secreta, solo va en el backend.
-- Una **segunda API key** para el mapa, con **Maps JavaScript API** activada, restringida a sitios web (`http://localhost:5173/*` y la URL del frontend en Vercel).
-- Un **ID de cliente de OAuth** de tipo "Aplicación web", con la URL de callback de Supabase (`https://<proyecto>.supabase.co/auth/v1/callback`) en **URIs de redireccionamiento autorizados**.
+- An **API key** with **Places API (New)** enabled. It is secret and only goes in the backend.
+- A **second API key** for the map, with **Maps JavaScript API** enabled, restricted to websites (`http://localhost:5173/*` and the frontend URL on Vercel).
+- An **OAuth client ID** of type "Web application", with the Supabase callback URL (`https://<project>.supabase.co/auth/v1/callback`) in **Authorized redirect URIs**.
 
-En Supabase:
+In Supabase:
 
-- **SQL Editor**: corre [`backend/supabase/schema.sql`](backend/supabase/schema.sql) para crear las tablas.
-- **Authentication → Sign In / Providers**: Email activado (sin confirmación de correo) y Google activado con el ID y el secreto de cliente de OAuth. El secreto solo va aquí, nunca en el código.
-- **Authentication → URL Configuration → Redirect URLs**: agrega `http://localhost:5173`, `http://localhost:5173/reset-password`, la URL del frontend en Vercel y `<URL del frontend>/reset-password`.
-- **Correos**: el servidor de correo de prueba de Supabase solo envía a los miembros del proyecto y tiene un límite bajo por hora. Para que usuarios reales reciban el correo de recuperación hay que configurar un SMTP propio en Authentication → Emails.
+- **SQL Editor**: run [`backend/supabase/schema.sql`](backend/supabase/schema.sql) to create the tables.
+- **Authentication → Sign In / Providers**: Email enabled (without email confirmation) and Google enabled with the OAuth client ID and secret. The secret only goes here, never in the code.
+- **Authentication → URL Configuration → Redirect URLs**: add `http://localhost:5173`, `http://localhost:5173/reset-password`, the frontend URL on Vercel and `<frontend URL>/reset-password`.
+- **Emails**: Supabase's test email server only sends to project members and has a low hourly limit. For real users to receive the recovery email you need to set up your own SMTP in Authentication → Emails.
 
-## Cómo correrlo localmente
+## Running it locally
 
-En cada carpeta, el `cp` es solo la primera vez. Si el `.env` ya existe, sáltatelo: `cp` lo reemplaza y borra tus llaves.
+In each folder, the `cp` is only for the first time. If the `.env` already exists, skip it: `cp` replaces it and deletes your keys.
 
 ### 1. Backend
 
@@ -282,60 +282,60 @@ cd backend
 cp .env.example .env
 ```
 
-En `backend/.env` pon:
+In `backend/.env` set:
 
-- `GOOGLE_PLACES_API_KEY`: la key de Places.
-- `SUPABASE_URL` y `SUPABASE_PUBLISHABLE_KEY`: los mismos valores que en el frontend.
-- `SUPABASE_SECRET_KEY`: en Supabase → Project Settings → API Keys → Secret keys. Se salta las reglas de acceso, así que solo va en el backend; solo la usa el endpoint de listas compartidas.
+- `GOOGLE_PLACES_API_KEY`: the Places key.
+- `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY`: the same values as in the frontend.
+- `SUPABASE_SECRET_KEY`: in Supabase → Project Settings → API Keys → Secret keys. It bypasses the access rules, so it only goes in the backend; only the shared lists endpoint uses it.
 
-Después:
+Then:
 
 ```bash
 npm start
 ```
 
-Corre `vercel dev` en `http://localhost:3001`. La primera vez pide iniciar sesión en Vercel y vincular el proyecto. Si agregas un archivo nuevo en `api/`, reinícialo.
+It runs `vercel dev` on `http://localhost:3001`. The first time it asks you to log in to Vercel and link the project. If you add a new file in `api/`, restart it.
 
 ### 2. Frontend
 
-En otra terminal:
+In another terminal:
 
 ```bash
 cd frontend
 cp .env.example .env
 ```
 
-En `frontend/.env` pon:
+In `frontend/.env` set:
 
-- `VITE_SUPABASE_URL` y `VITE_SUPABASE_PUBLISHABLE_KEY`: en Supabase → Project Settings → API Keys.
-- `VITE_GOOGLE_MAPS_API_KEY`: la key del mapa.
+- `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`: in Supabase → Project Settings → API Keys.
+- `VITE_GOOGLE_MAPS_API_KEY`: the map key.
 
-Después:
+Then:
 
 ```bash
 npm install
 npm run dev
 ```
 
-Abre `http://localhost:5173` y acepta el permiso de ubicación. Vite le pasa las llamadas a `/api` al backend, así que los dos tienen que estar corriendo.
+Open `http://localhost:5173` and accept the location permission. Vite forwards the `/api` calls to the backend, so both have to be running.
 
-Para revisar el código: `npm run lint` en `frontend/`.
+To check the code: `npm run lint` in `frontend/`.
 
-## Desplegar en Vercel
+## Deploying to Vercel
 
-Son dos proyectos de Vercel desde el mismo repositorio. Cada push a `main` los vuelve a desplegar solos.
+These are two Vercel projects from the same repository. Every push to `main` redeploys them automatically.
 
-1. **Backend**: Add New → Project, importa el repo, **Root Directory** `backend`, las 4 variables de `backend/.env`. Deploy y copia su URL.
-2. En `frontend/vercel.json`, pon esa URL en el destino de `/api/:path*` (hoy es `https://entre-platos-backend.vercel.app`) y haz commit.
-3. **Frontend**: Add New → Project, mismo repo, **Root Directory** `frontend`, variables `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY` y `VITE_GOOGLE_MAPS_API_KEY`. Deploy.
-4. Agrega la URL del frontend en Supabase (Redirect URLs, también con `/reset-password`) y en las restricciones de la key de Maps.
+1. **Backend**: Add New → Project, import the repo, **Root Directory** `backend`, the 4 variables from `backend/.env`. Deploy and copy its URL.
+2. In `frontend/vercel.json`, put that URL as the destination of `/api/:path*` (currently `https://entre-platos-backend.vercel.app`) and commit.
+3. **Frontend**: Add New → Project, same repo, **Root Directory** `frontend`, variables `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY` and `VITE_GOOGLE_MAPS_API_KEY`. Deploy.
+4. Add the frontend URL in Supabase (Redirect URLs, also with `/reset-password`) and in the Maps key restrictions.
 
-## Tecnologías
+## Technologies
 
-- **Frontend:** React 19 con Vite y React Router
-- **Backend:** Vercel Functions (Node.js) en `backend/api/`
-- **Base de datos y usuarios:** Supabase (Postgres con Row Level Security, y Auth con correo y contraseña y Google como SSO)
-- **Traducciones:** i18next y react-i18next, con textos propios en `frontend/src/locales/`
-- **Google Places API (New)** en el backend: restaurantes, fotos, reseñas y resumen de Gemini
-- **Google Maps JavaScript API** en el frontend, con `@vis.gl/react-google-maps`
-- **ESLint** para revisar el código
+- **Frontend:** React 19 with Vite and React Router
+- **Backend:** Vercel Functions (Node.js) in `backend/api/`
+- **Database and users:** Supabase (Postgres with Row Level Security, and Auth with email and password and Google as SSO)
+- **Translations:** i18next and react-i18next, with our own texts in `frontend/src/locales/`
+- **Google Places API (New)** in the backend: restaurants, photos, reviews and Gemini summary
+- **Google Maps JavaScript API** in the frontend, with `@vis.gl/react-google-maps`
+- **ESLint** to check the code
