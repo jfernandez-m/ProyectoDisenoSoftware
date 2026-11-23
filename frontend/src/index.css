@@ -368,15 +368,20 @@ body {
   color: var(--color-primary);
 }
 
-/* Hover preview (StarRating sets the classes): the stars up to the mouse in a faded red,
-   the rest grey. After clicking, aria-pressed paints the saved rating solid. */
-.previewing .star-button {
-  color: var(--color-border);
-}
-
-.previewing .star-button.preview {
+/* Hover preview (StarRating sets .preview on the stars up to the mouse). The saved rating
+   always stays solid red; the extra stars you would add show in a faded red. */
+.star-button.preview:not([aria-pressed='true']) {
   color: var(--color-primary);
   opacity: 0.45;
+}
+
+/* The star under the mouse grows a little, so hovering is visible even inside the saved rating. */
+.star-button {
+  transition: transform 0.1s;
+}
+
+.star-button:hover {
+  transform: scale(1.2);
 }
 
 /* --- Google reviews --- */

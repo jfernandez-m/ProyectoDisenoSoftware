@@ -16,8 +16,7 @@ function StarRating({ place, ratings }) {
   }
 
   return (
-    // previewing: the mouse is over the stars, so they show the hover instead of the saved rating.
-    <div className={hover ? 'my-rating previewing' : 'my-rating'} onPointerLeave={() => setHover(0)}>
+    <div className="my-rating" onPointerLeave={() => setHover(0)}>
       <span className="muted">{t('ratings.yours')}</span>
       {[1, 2, 3, 4, 5].map((stars) => (
         <button
