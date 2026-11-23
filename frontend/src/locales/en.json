@@ -32,7 +32,9 @@
     "visitedTitle": "Been there",
     "empty": "No restaurants here yet.",
     "share": "Share list",
-    "copied": "Link copied:"
+    "copied": "Link copied:",
+    "added": "✓ Saved to {{list}}",
+    "removed": "Removed from your lists"
   },
   "share": {
     "title": "{{list}} · {{name}}'s list",
