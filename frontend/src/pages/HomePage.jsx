@@ -3,22 +3,20 @@ import { useTranslation } from 'react-i18next'
 import { useAuth } from '../auth/AuthContext.jsx'
 import Recommendations from '../components/Recommendations.jsx'
 import RestaurantCard from '../components/RestaurantCard.jsx'
-import { cuisineLabel, PRICE_LABELS } from '../format.js'
+import { CUISINE_FILTERS, cuisineLabel, PRICE_LABELS } from '../format.js'
 import { useNearbyRestaurants } from '../hooks/useNearbyRestaurants.js'
 
 function HomePage() {
   const { t } = useTranslation()
-  const { position, restaurants, error } = useNearbyRestaurants()
   const { user } = useAuth()
   const [price, setPrice] = useState('') // '' = any price
   const [cuisine, setCuisine] = useState('') // '' = any cuisine
+  // The backend does the filtering: with a filter it finds the nearest restaurants that match.
+  const { position, restaurants, error } = useNearbyRestaurants({ cuisine, price })
+  const filtered = Boolean(cuisine || price)
 
-  // shortcut: filters the 5 results already loaded, move it to /api/restaurants when we ask Google for more.
-  const visible = (restaurants ?? []).filter(
-    (r) => (!price || r.priceLevel === price) && (!cuisine || r.cuisine === cuisine),
-  )
-  // The options come from the loaded restaurants, so every option has at least one result.
-  const cuisines = [...new Set((restaurants ?? []).map((r) => r.cuisine).filter(Boolean))].sort()
+  // Fixed list, sorted by its name in the current language.
+  const cuisines = [...CUISINE_FILTERS].sort((a, b) => cuisineLabel(t, a).localeCompare(cuisineLabel(t, b)))
 
   return (
     <>
@@ -48,12 +46,14 @@ function HomePage() {
         </select>
       </label>
 
+      {filtered && <p className="muted">{t('filters.nearestHint')}</p>}
+
       {error && <p role="alert">{t(error)}</p>}
       {!error && !restaurants && <p>{t('loading')}</p>}
-      {restaurants && visible.length === 0 && <p>{t('noMatches')}</p>}
+      {restaurants && restaurants.length === 0 && <p>{t(filtered ? 'noMatches' : 'noRestaurants')}</p>}
 
       <ul className="restaurant-list">
-        {visible.map((restaurant) => (
+        {(restaurants ?? []).map((restaurant) => (
           <RestaurantCard key={restaurant.id} restaurant={restaurant} />
         ))}
       </ul>

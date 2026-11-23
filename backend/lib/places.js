@@ -48,8 +48,8 @@ const LODGING_TYPES = [
 ]
 
 // Finds up to `max` (1 to 20) places of the given types inside a circle (radius in meters),
-// most popular first. Throws if Google fails.
-export async function searchNearby({ latitude, longitude, radius, max, types = ['restaurant'] }) {
+// most popular first, or nearest first with byDistance. Throws if Google fails.
+export async function searchNearby({ latitude, longitude, radius, max, types = ['restaurant'], byDistance = false }) {
   const response = await fetch(SEARCH_NEARBY_URL, {
     method: 'POST',
     headers: {
@@ -61,6 +61,7 @@ export async function searchNearby({ latitude, longitude, radius, max, types = [
       includedTypes: types,
       excludedPrimaryTypes: LODGING_TYPES,
       maxResultCount: max,
+      rankPreference: byDistance ? 'DISTANCE' : 'POPULARITY',
       locationRestriction: { circle: { center: { latitude, longitude }, radius } },
     }),
   })

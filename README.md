@@ -27,7 +27,7 @@ Una app web para encontrar dónde comer según tus gustos y dónde estás. Muest
 
 - Pide permiso de ubicación al navegador y busca los 5 restaurantes más populares en 1 km a la redonda (Google Places API).
 - Cada restaurante es una tarjeta con hasta 4 fotos que se deslizan, la calificación de Google en estrellas, cuántas opiniones tiene, el tipo de comida, el precio y la dirección.
-- Filtros por precio y por tipo de comida. Las opciones salen de los restaurantes cargados, así que ninguna opción queda vacía.
+- Filtros por precio ($ a $$$$) y por tipo de comida (27 tipos comunes en Chile, en `frontend/src/format.js`). Con un filtro, el backend busca los 5 restaurantes **más cercanos** que lo cumplen, aunque estén a más de 1 km: si pides mariscos y cerca solo hay pizzerías, igual aparecen los lugares de mariscos más cercanos. Sin filtros, se muestran los 5 más populares en 1 km.
 - Mensajes claros mientras carga, si no das permiso de ubicación, si la búsqueda falla o si ningún restaurante calza con los filtros.
 - Con sesión iniciada, cada tarjeta tiene además los botones de listas y "Tu nota", y debajo aparece "Recomendado para ti".
 
@@ -141,7 +141,7 @@ Cada archivo de `backend/api/` es una Vercel Function y su nombre es la ruta. "S
 
 | Método y ruta | Sesión | Qué hace |
 | --- | --- | --- |
-| `GET /api/restaurants?lat=&lng=&radius=` | No | Los 5 restaurantes más populares en el radio (por defecto 1000 m) |
+| `GET /api/restaurants?lat=&lng=&radius=&cuisine=&price=` | No | Sin filtros: los 5 más populares en el radio (por defecto 1000 m). Con `cuisine` (tipo de Google) o `price`: los 5 más cercanos que cumplen el filtro. Google no filtra por precio, así que el precio se filtra en el backend sobre los 20 más populares en 5 km |
 | `GET /api/photo?name=&size=600\|1200` | No | Una foto de Google, sin exponer la key. Solo acepta nombres de fotos reales |
 | `GET /api/place?id=&lang=es\|en` | No | Un restaurante: datos, hasta 10 fotos, ubicación, 5 reseñas y el resumen de Gemini |
 | `GET /api/lists` | Sí | Tus restaurantes guardados en listas |
@@ -222,7 +222,7 @@ Filtrado basado en contenido, en `backend/api/recommendations.js`:
         ├── api.js                apiFetch(): fetch al backend con el token de la sesión
         ├── supabase.js           Cliente de Supabase del navegador
         ├── i18n.js               Configuración de idiomas (recuerda la elección)
-        ├── format.js             Precios ($ a $$$$) y nombres de tipos de comida
+        ├── format.js             Precios ($ a $$$$), tipos de comida del filtro y sus nombres
         ├── index.css             Todos los estilos y variables de diseño
         ├── locales/
         │   ├── es.json           Textos en español

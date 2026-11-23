@@ -10,10 +10,12 @@
   "filters": {
     "price": "Precio",
     "cuisine": "Tipo de comida",
-    "any": "Todos"
+    "any": "Todos",
+    "nearestHint": "Mostrando los 5 más cercanos que cumplen el filtro, aunque estén más lejos."
   },
   "loading": "Cargando…",
-  "noMatches": "Ningún restaurante coincide con estos filtros.",
+  "noMatches": "No encontramos restaurantes cercanos con estos filtros. Prueba con otro precio o tipo de comida.",
+  "noRestaurants": "No encontramos restaurantes cerca.",
   "noRating": "Sin calificación",
   "photos": "Fotos del restaurante",
   "reviews_one": "{{count}} opinión",
