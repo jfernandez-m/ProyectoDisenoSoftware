@@ -13,17 +13,28 @@ export function useRatings() {
     apiFetch('/api/ratings').then(setItems).catch(() => setItems([]))
   }, [user])
 
+  // Optimistic, like the lists: the stars change right away; if saving fails they go back.
   async function rate(place, stars) {
-    const saved = await apiFetch('/api/ratings', {
-      method: 'POST',
-      body: JSON.stringify({ place, stars }),
-    })
-    setItems((current) => [saved, ...(current ?? []).filter((item) => item.place_id !== place.id)])
+    const previous = items
+    const row = { place_id: place.id, stars, name: place.name, cuisine: place.cuisine, price_level: place.priceLevel }
+    setItems((current) => [row, ...(current ?? []).filter((item) => item.place_id !== place.id)])
+    try {
+      await apiFetch('/api/ratings', { method: 'POST', body: JSON.stringify({ place, stars }) })
+    } catch (error) {
+      setItems(previous)
+      throw error
+    }
   }
 
   async function unrate(placeId) {
-    await apiFetch(`/api/ratings?placeId=${encodeURIComponent(placeId)}`, { method: 'DELETE' })
+    const previous = items
     setItems((current) => current.filter((item) => item.place_id !== placeId))
+    try {
+      await apiFetch(`/api/ratings?placeId=${encodeURIComponent(placeId)}`, { method: 'DELETE' })
+    } catch (error) {
+      setItems(previous)
+      throw error
+    }
   }
 
   // 1..5, or undefined if the user hasn't rated it.

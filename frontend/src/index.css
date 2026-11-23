@@ -323,11 +323,6 @@ body {
   border-color: var(--color-primary);
 }
 
-.chip:disabled {
-  opacity: 0.6;
-  cursor: wait;
-}
-
 /* Short confirmation after saving ("Saved to Want to go"). */
 .list-feedback {
   font-size: var(--font-sm);
@@ -373,19 +368,15 @@ body {
   color: var(--color-primary);
 }
 
-/* Hover preview: the hovered star and the ones before it in a faded red;
-   after clicking, aria-pressed paints them solid. Only on devices with a mouse,
-   because on phones the hover "sticks" after tapping. */
-@media (hover: hover) {
-  .my-rating:hover .star-button {
-    color: var(--color-border);
-  }
+/* Hover preview (StarRating sets the classes): the stars up to the mouse in a faded red,
+   the rest grey. After clicking, aria-pressed paints the saved rating solid. */
+.previewing .star-button {
+  color: var(--color-border);
+}
 
-  .my-rating .star-button:hover,
-  .my-rating .star-button:has(~ .star-button:hover) {
-    color: var(--color-primary);
-    opacity: 0.45;
-  }
+.previewing .star-button.preview {
+  color: var(--color-primary);
+  opacity: 0.45;
 }
 
 /* --- Google reviews --- */
