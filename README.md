@@ -1,5 +1,7 @@
 # Entre Platos
 
+[![Tests](https://github.com/jfernandez-m/ProyectoDisenoSoftware/actions/workflows/test.yml/badge.svg)](https://github.com/jfernandez-m/ProyectoDisenoSoftware/actions/workflows/test.yml)
+
 Personalized restaurant recommender. Individual project for Software Design (TICS316-2-2026), UAI. Topic 1.
 
 **In production:** https://entre-platos.vercel.app
@@ -18,6 +20,7 @@ A web app to find where to eat based on your taste and where you are. It shows n
 - [Project structure](#project-structure)
 - [Setup](#setup)
 - [Running it locally](#running-it-locally)
+- [Tests](#tests)
 - [Deploying to Vercel](#deploying-to-vercel)
 - [Technologies](#technologies)
 
@@ -141,7 +144,7 @@ Each file in `backend/api/` is a Vercel Function and its name is the route. "Ses
 
 | Method and route | Session | What it does |
 | --- | --- | --- |
-| `GET /api/restaurants?lat=&lng=&radius=&cuisine=&price=` | No | Without filters: the 5 most popular within the radius (default 1000 m). With `cuisine` (Google type) or `price`: the 5 nearest that match the filter. Google doesn't filter by price, so the backend filters the price over the 20 most popular within 5 km |
+| `GET /api/restaurants?lat=&lng=&radius=&cuisine=&price=` | No | Without filters: the 5 most popular within the radius (default 1000 m, at most 50000). With `cuisine` (Google type) or `price`: the 5 nearest that match the filter. Google doesn't filter by price, so the backend filters the price over the 20 most popular within 5 km |
 | `GET /api/photo?name=&size=600\|1200` | No | A Google photo, without exposing the key. Only accepts real photo names |
 | `GET /api/place?id=&lang=es\|en` | No | One restaurant: details, up to 10 photos, location, 5 reviews and the Gemini summary |
 | `GET /api/lists` | Yes | Your restaurants saved in lists |
@@ -174,7 +177,7 @@ Postgres on Supabase. The full SQL is in [`backend/supabase/schema.sql`](backend
 
 ## Recommender
 
-Content-based filtering, in `backend/api/recommendations.js`:
+Content-based filtering. `backend/api/recommendations.js` reads the user's data and searches Google; the scoring is in `backend/lib/recommender.js`, which is covered by [tests](#tests):
 
 1. **Your taste profile.** Each signal adds points to the restaurant's cuisine and price range:
    - Rating: 5★ +2, 4★ +1, 3★ 0, 2★ −1, 1★ −2
@@ -190,9 +193,10 @@ Content-based filtering, in `backend/api/recommendations.js`:
 ```
 .
 ├── README.md
+├── .github/workflows/test.yml    GitHub Actions: runs the backend tests on every PR and push to main
 ├── backend/                      API: Vercel project with Root Directory "backend"
 │   ├── .env.example              Backend variables (without values)
-│   ├── package.json              "npm start" = vercel dev on port 3001
+│   ├── package.json              "npm start" = vercel dev on port 3001, "npm test" = the tests
 │   ├── api/                      Each file is an endpoint /api/<name>
 │   │   ├── restaurants.js        Nearby restaurants
 │   │   ├── photo.js              Google photo proxy
@@ -204,9 +208,13 @@ Content-based filtering, in `backend/api/recommendations.js`:
 │   │   └── recommendations.js    Recommender
 │   ├── lib/                      Code shared by the endpoints (not endpoints)
 │   │   ├── places.js             Google Places calls and our own restaurant format
+│   │   ├── recommender.js        Taste profile and scoring of the recommender
 │   │   └── supabase.js           authenticate() (client as the user) and admin() (secret key)
-│   └── supabase/
-│       └── schema.sql            Tables, Row Level Security and permissions
+│   ├── supabase/
+│   │   └── schema.sql            Tables, Row Level Security and permissions
+│   └── test/                     Tests (node --test), outside api/ so they are not endpoints
+│       ├── recommender.test.js   Recommender edge cases
+│       └── restaurants.test.js   /api/restaurants: validation and filters, with a fake Google
 └── frontend/                     React app: Vercel project with Root Directory "frontend"
     ├── .env.example              Frontend variables (without values)
     ├── index.html                Base HTML, title and icon
@@ -320,6 +328,33 @@ npm run dev
 Open `http://localhost:5173` and accept the location permission. Vite forwards the `/api` calls to the backend, so both have to be running.
 
 To check the code: `npm run lint` in `frontend/`.
+
+## Tests
+
+The backend tests use Node's built-in test runner (`node:test`), so they need no extra dependencies. They don't call Google or Supabase: the recommender is tested with plain data, and the restaurants endpoint with a fake `fetch` that answers like Google. They need no API keys and spend no quota.
+
+```bash
+cd backend
+npm test
+```
+
+GitHub Actions also runs them on every pull request and on every push to `main` (`.github/workflows/test.yml`). Each PR shows the result (✓ or ✗), and the badge at the top of this README shows the result on `main`.
+
+**Recommender** (`test/recommender.test.js`), edge cases of `lib/recommender.js`:
+
+- A user with no ratings, lists or views (cold start): empty profile, and Google's rating decides the order.
+- Every restaurant with 5 stars: with no profile they all tie and keep Google's order (most popular first); with a profile, the user's taste breaks the tie.
+- A restaurant without a Google rating counts as 4, so it neither adds nor subtracts.
+- A cuisine rated with 1 star sinks below worse rated restaurants.
+- Restaurants already rated or visited are left out, duplicates appear once, and at most 5 are returned.
+
+**Restaurants endpoint and filters** (`test/restaurants.test.js`), `GET /api/restaurants`:
+
+- Invalid parameters answer `400` without calling Google: missing or out-of-range `lat`/`lng`, a `radius` that is not between 1 and 50000, an unknown `price` or a `cuisine` with strange characters.
+- No filters: the 5 most popular within 1 km.
+- Price filter: only that price, nearest first, at most 5; an empty list (not an error) when nothing matches.
+- Cuisine filter: asks Google for that type ordered by distance, up to 50 km; it also combines with price.
+- If Google fails, the endpoint answers `502`.
 
 ## Deploying to Vercel
 
