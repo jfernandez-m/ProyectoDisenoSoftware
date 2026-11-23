@@ -13,7 +13,7 @@ function HomePage() {
   const [price, setPrice] = useState('') // '' = any price
   const [cuisine, setCuisine] = useState('') // '' = any cuisine
 
-  // shortcut: filters the 10 results already loaded, move it to /api/restaurants when we ask Google for more.
+  // shortcut: filters the 5 results already loaded, move it to /api/restaurants when we ask Google for more.
   const visible = (restaurants ?? []).filter(
     (r) => (!price || r.priceLevel === price) && (!cuisine || r.cuisine === cuisine),
   )
@@ -22,9 +22,6 @@ function HomePage() {
 
   return (
     <>
-      {/* Only with a session: recommendations come from the user's ratings, lists and views. */}
-      {user && position && <Recommendations position={position} />}
-
       <h1>{t('title')}</h1>
 
       <label className="filter">
@@ -60,6 +57,9 @@ function HomePage() {
           <RestaurantCard key={restaurant.id} restaurant={restaurant} />
         ))}
       </ul>
+
+      {/* Only with a session: recommendations come from the user's ratings, lists and views. */}
+      {user && position && <Recommendations position={position} />}
     </>
   )
 }

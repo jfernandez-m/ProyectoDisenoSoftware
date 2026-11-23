@@ -445,8 +445,9 @@ a.card-name:hover {
 
 /* --- Recommendations --- */
 
+/* Below the nearby list: the space separates it from the list above. */
 .recommendations {
-  margin-bottom: var(--space-5);
+  margin-top: var(--space-5);
 }
 
 /* Why we recommend it: same red as the stars, so it stands out on the card. */
