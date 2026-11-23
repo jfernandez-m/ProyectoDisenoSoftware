@@ -21,16 +21,21 @@ export async function GET(request) {
   const cuisine = url.searchParams.get('cuisine') || null // a Google type, like "seafood_restaurant"
   const price = url.searchParams.get('price') || null
 
-  // 400: the client made the mistake (missing or invalid parameters).
+  // 400: the client made the mistake (missing or invalid parameters). Checked here so a bad
+  // value never reaches Google, which would answer with an error (and we would send a 502).
   if (
     !url.searchParams.has('lat') ||
     !url.searchParams.has('lng') ||
-    Number.isNaN(latitude) ||
-    Number.isNaN(longitude) ||
+    !(Math.abs(latitude) <= 90) || // also false for NaN
+    !(Math.abs(longitude) <= 180) ||
+    !(radius > 0 && radius <= 50000) || // Google's maximum radius is 50 km
     (cuisine && !/^[a-z_]+$/.test(cuisine)) ||
     (price && !PRICES.includes(price))
   ) {
-    return Response.json({ error: 'lat and lng are required numbers; cuisine or price are invalid' }, { status: 400 })
+    return Response.json(
+      { error: 'lat (-90 to 90) and lng (-180 to 180) are required; radius (1 to 50000), cuisine or price are invalid' },
+      { status: 400 },
+    )
   }
 
   try {
